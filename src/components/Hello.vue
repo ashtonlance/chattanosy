@@ -116,8 +116,11 @@ export default {
         })
     },
     removeLocation: function (location) {
-      miniToastr.error(location.name + ' has been removed')
-      locationsRef.child(location['.key']).remove()
+      if (confirm('Are you sure you want to delete?') === true) {
+        miniToastr.error(location.name + ' has been removed')
+        locationsRef.child(location['.key']).remove()
+      } else {
+      }
     }
   },
   mounted: function () {
