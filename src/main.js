@@ -9,11 +9,16 @@ import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import miniToastr from 'mini-toastr'
+import VueAnalytics from 'vue-analytics'
 
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyDni8xEY3eGI6q0ewpUjxYfQyvjJeDbbQo'
   }
+})
+Vue.use(VueAnalytics, {
+  id: 'UA-99566231-2',
+  router
 })
 
 Vue.use(VueFire)

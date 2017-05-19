@@ -19,6 +19,7 @@
     "mini-toastr": "^0.6.5",
     "toastr": "^2.1.2",
     "vue": "^2.2.6",
+    "vue-analytics": "^4.1.2",
     "vue-router": "^2.3.1",
     "vue-toast": "^3.1.0",
     "vue2-google-maps": "^0.7.5",
