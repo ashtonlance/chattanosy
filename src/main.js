@@ -8,6 +8,7 @@ import router from './router'
 import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import miniToastr from 'mini-toastr'
 
 Vue.use(VueGoogleMaps, {
   load: {
@@ -17,6 +18,7 @@ Vue.use(VueGoogleMaps, {
 
 Vue.use(VueFire)
 Vue.use(Buefy)
+Vue.use(miniToastr)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

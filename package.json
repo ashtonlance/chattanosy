@@ -11,10 +11,16 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "@lassehaslev/vue-confirm": "^1.1.1",
+    "axios": "^0.16.1",
     "buefy": "^0.3.1",
     "firebase": "^4.0.0",
+    "jquery": "^3.2.1",
+    "mini-toastr": "^0.6.5",
+    "toastr": "^2.1.2",
     "vue": "^2.2.6",
     "vue-router": "^2.3.1",
+    "vue-toast": "^3.1.0",
     "vue2-google-maps": "^0.7.5",
     "vuefire": "^1.4.2"
   },

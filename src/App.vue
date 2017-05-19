@@ -20,10 +20,9 @@
       <div class="nav-right nav-menu" onclick="document.querySelector('.nav-menu').classList.toggle('is-active');">
         <router-link to="/" class="nav-item">
           Home
-        </router-link>
-        
-        <router-link to="/contact" class="nav-item">
-          Contact
+        </router-link>        
+        <router-link to="/about" class="nav-item">
+          About
         </router-link>
       </div>
     </nav>
