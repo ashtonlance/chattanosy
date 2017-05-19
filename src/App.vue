@@ -1,11 +1,40 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+        <nav class="nav has-shadow">
+      <div class="nav-left">
+        <router-link to="/" class="nav-item">
+          <h1>CHATTANOSY</h1>
+        </router-link>
+      </div>
+  
+      <!-- This "nav-toggle" hamburger menu is only visible on mobile -->
+      <!-- You need JavaScript to toggle the "is-active" class on "nav-menu" -->
+      <span class="nav-toggle" onclick="document.querySelector('.nav-menu').classList.toggle('is-active');">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+  
+      <!-- This "nav-menu" is hidden on mobile -->
+      <!-- Add the modifier "is-active" to display it on mobile -->
+      <div class="nav-right nav-menu" onclick="document.querySelector('.nav-menu').classList.toggle('is-active');">
+        <router-link to="/" class="nav-item">
+          Home
+        </router-link>
+        
+        <router-link to="/contact" class="nav-item">
+          Contact
+        </router-link>
+      </div>
+    </nav>
+    <transition name="fade" mode="out-in" appear>
     <router-view></router-view>
+    </transition>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'app'
 }
@@ -18,6 +47,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

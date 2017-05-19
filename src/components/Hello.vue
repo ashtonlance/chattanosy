@@ -1,31 +1,44 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <gmap-map :center="center" :zoom="10" style="width: 90%; height: 500px">
+      <!--<gmap-marker :key="index" v-for="(m, index) in markers" :position="m.position" :clickable="true" :draggable="true" @click="center=m.position"></gmap-marker>-->
+    </gmap-map>
+    <table class="table">
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Notes</th>
+      </tr>
+      <tbody>
+        <tr v-for="location in locations">
+          <td>{{location.name}}</td>
+          <td>{{location.address}}</td>
+          <td>{{location.notes}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
+
+import db from '../db'
+
+let locationsRef = db.ref('locations/')
+
 export default {
-  name: 'hello',
+  name: 'app',
+  firebase: {
+    locations: locationsRef
+  },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      center: { lat: 35.0456, lng: -85.3097 },
+      markers: [{
+        position: { lat: 10.0, lng: 10.0 }
+      }, {
+        position: { lat: 11.0, lng: 11.0 }
+      }]
     }
   }
 }
@@ -33,7 +46,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
+.hello {
+  margin-top: 50px;
+}
+.vue-map-container {
+  margin: auto;
+}
+
+h1,
+h2 {
   font-weight: normal;
 }
 
