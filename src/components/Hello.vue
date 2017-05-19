@@ -15,9 +15,9 @@
             <td>{{location.name}}</td>
             <td>{{location.address}}</td>
             <td>{{location.notes}}</td>
-            <td>
+            <!--<td>
               <span class="" aria-hidden="true" v-on:click="removeLocation(location)">Delete</span>
-            </td>
+            </td>-->
           </tr>
         </tbody>
       </table>
