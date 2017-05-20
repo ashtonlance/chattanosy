@@ -1,27 +1,29 @@
 <template>
   <div class="hello">
     <div id="main-wrapper">
-      <gmap-map :center="center" :zoom="14" style="width: 90%; height: 500px">
+      <gmap-map :center="center" :zoom="12" style="width: 90%; height: 450px">
         <gmap-marker :key="index" v-for="(location, index) in locations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false"></gmap-marker>
       </gmap-map>
+      <a id="add-button" class="button is-primary" v-on:click="show = true">Add Entry</a>
       <table class="table is-narrow">
         <tr>
           <th>Name</th>
-          <th>Address</th>
-          <th>Notes</th>
+          <th>Address/Info</th>
+          <!--<th>Notes</th>-->
         </tr>
         <tbody>
-          <tr v-for="location in locations">
+          <tr  v-for="location in locations">
             <td>{{location.name}}</td>
-            <td>{{location.address}}</td>
-            <td>{{location.notes}}</td>
+            <td>
+              <b>{{location.address}}</b>
+              <br>
+              {{location.notes}}</td>
             <!--<td>
               <span class="" aria-hidden="true" v-on:click="removeLocation(location)">Delete</span>
             </td>-->
           </tr>
         </tbody>
       </table>
-      <a class="button is-primary" v-on:click="show = true">Add Location</a>
     </div>
     <transition name="fade">
       <div id="modal" class="modal is-active" v-if="show">
@@ -66,6 +68,30 @@
         </div>
       </div>
     </transition>
+    <transition name="fade">
+      <div id="modal2" class="modal is-active" v-if="showReply">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">CHATTANOSY</p>
+            <button id="closeModal" class="delete" v-on:click="showReply = false"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="content">
+              <form id="form" class="field" v-on:submit.prevent="replyToLocation">                
+                <p class="control">
+                  <label class="label" for="locationNotes">Reply</label>
+                  <textarea type="text" placeholder="Notes about this location" id="locationNotes" class="textarea" v-model="this.locations.reply"></textarea>
+                </p>
+                <p class="control">
+                  <button type="submit" v-on:click="showReply = false" class="button is-primary">Submit</button>
+                </p>
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -89,9 +115,11 @@ export default {
         notes: '',
         lat: '',
         lng: '',
-        errors: ''
+        errors: '',
+        reply: ''
       },
       show: false,
+      showReply: false,
       bkClass: 'bk',
       blurClass: 'blur'
     }
@@ -115,12 +143,18 @@ export default {
           miniToastr.error('Something went wrong!')
         })
     },
-    removeLocation: function (location) {
-      if (confirm('Are you sure you want to delete?') === true) {
-        miniToastr.error(location.name + ' has been removed')
-        locationsRef.child(location['.key']).remove()
-      } else {
-      }
+    replyToLocation: function (location) {
+      console.log(location)
+      console.log(this.locations.reply)
+      locationsRef.child(location['.key']).update({
+        reply: this.locations.reply
+      })
+      // this.location.reply = ''
+      // if (confirm('Are you sure you want to delete?') === true) {
+      //   miniToastr.error(location.name + ' has been removed')
+      //   locationsRef.child(location['.key']).remove()
+      // } else {
+      // }
     }
   },
   mounted: function () {
@@ -142,10 +176,13 @@ export default {
   margin: auto;
 }
 
+#add-button {
+  margin: 25px 25px;
+}
+
 table {
   width: 90%;
   margin: auto;
-  margin-top: 50px;
   margin-bottom: 50px;
 }
 
