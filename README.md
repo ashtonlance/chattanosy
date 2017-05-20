@@ -1,4 +1,5 @@
-# chattanosy
+# Chattanosy
+I built this because I'm always being nosy about new things/places being built in our city. I figured we could create community-powered database to keep track of them all! This site is very-beta - so please test it out and let me know if you have any suggestions/improvement/bugs to report.
 
 > A Vue.js project
 
@@ -19,4 +20,4 @@ npm run build --report
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-# chattanosy
+# Chattanosy
