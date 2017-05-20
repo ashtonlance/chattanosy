@@ -9,18 +9,16 @@
         <tr>
           <th>Name</th>
           <th>Address/Info</th>
-          <!--<th>Notes</th>-->
         </tr>
         <tbody>
-          <tr  v-for="location in locations">
-            <td>{{location.name}}</td>
+          <tr v-for="place in locations">
+            <td>{{place.name}}</td>
             <td>
-              <b>{{location.address}}</b>
-              <br>
-              {{location.notes}}</td>
-            <!--<td>
-              <span class="" aria-hidden="true" v-on:click="removeLocation(location)">Delete</span>
-            </td>-->
+              <b>{{place.address}}</b>
+              <br>{{place.notes}}
+              <br><span class="message">Replies: {{place.reply}}</span>
+              <span class="is-pulled-right" v-on:click="replyToLocation(place)"> REPLY</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -78,10 +76,10 @@
           </header>
           <section class="modal-card-body">
             <div class="content">
-              <form id="form" class="field" v-on:submit.prevent="replyToLocation">                
+              <form id="form" class="field" v-on:submit.prevent="submitReply">
                 <p class="control">
-                  <label class="label" for="locationNotes">Reply</label>
-                  <textarea type="text" placeholder="Notes about this location" id="locationNotes" class="textarea" v-model="this.locations.reply"></textarea>
+                  <label class="label" for="locationReply">Reply</label>
+                  <textarea type="text" placeholder="Reply" id="locationReply" class="textarea" v-model="reply"></textarea>
                 </p>
                 <p class="control">
                   <button type="submit" v-on:click="showReply = false" class="button is-primary">Submit</button>
@@ -100,7 +98,7 @@ import db from '../db'
 import axios from 'axios'
 import miniToastr from 'mini-toastr'
 let locationsRef = db.ref('locations/')
-
+let placeToUpdate
 export default {
   name: 'app',
   firebase: {
@@ -118,10 +116,19 @@ export default {
         errors: '',
         reply: ''
       },
+      updateLocation: {
+        name: '',
+        address: '',
+        notes: '',
+        lat: '',
+        lng: '',
+        errors: ''
+      },
       show: false,
       showReply: false,
       bkClass: 'bk',
-      blurClass: 'blur'
+      blurClass: 'blur',
+      reply: ''
     }
   },
   methods: {
@@ -143,18 +150,17 @@ export default {
           miniToastr.error('Something went wrong!')
         })
     },
-    replyToLocation: function (location) {
-      console.log(location)
-      console.log(this.locations.reply)
-      locationsRef.child(location['.key']).update({
-        reply: this.locations.reply
+    replyToLocation: function (place) {
+      this.showReply = true
+      placeToUpdate = place['.key'].toString()
+    },
+    submitReply: function () {
+      let replyTo = locationsRef.child(placeToUpdate)
+      replyTo.update({
+        'reply': this.reply
       })
-      // this.location.reply = ''
-      // if (confirm('Are you sure you want to delete?') === true) {
-      //   miniToastr.error(location.name + ' has been removed')
-      //   locationsRef.child(location['.key']).remove()
-      // } else {
-      // }
+      miniToastr.success('Reply submitted!')
+      this.reply = ''
     }
   },
   mounted: function () {
