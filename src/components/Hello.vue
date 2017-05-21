@@ -4,21 +4,24 @@
       <gmap-map :center="center" :zoom="12" style="width: 90%; height: 450px">
         <gmap-marker :key="index" v-for="(location, index) in locations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="location.visible=true">
           <gmap-info-window :opened="location.visible" @closeclick="location.visible=false">
-            <b>{{location.name}}</b><br>
-            {{location.address}}<br>
-            {{location.notes}}<br>
-            <b>Replies: </b>{{location.reply}}<br>
+            <b>{{location.name}}</b>
+            <br> {{location.address}}
+            <br> {{location.notes}}
+            <br>
+            <b>Replies: </b>{{location.reply}}
+            <br>
           </gmap-info-window>
         </gmap-marker>
       </gmap-map>
       <a id="add-button" class="button is-primary" v-on:click="show = true">Add Entry</a>
+      <b-input id="search" placeholder="Type to search" type="input" v-model="search"></b-input>
       <table class="table is-narrow">
         <tr>
           <th>Name</th>
           <th>Address/Info</th>
         </tr>
         <tbody>
-          <tr v-for="place in locations">
+          <tr v-for="place in filteredLocations">
             <td>{{place.name}}</td>
             <td>
               <b>{{place.address}}</b>
@@ -167,6 +170,15 @@ export default {
   },
   mounted: function () {
     miniToastr.init()
+  },
+  computed: {
+    filteredLocations: function () {
+      var self = this
+      return self.locations.filter(function (place) {
+        return place.name.toLowerCase().indexOf(self.search.toLowerCase()) > -1 || place.notes.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
+        place.reply.toLowerCase().indexOf(self.search.toLowerCase()) > -1
+      })
+    }
   }
 }
 </script>
@@ -218,5 +230,10 @@ form {
   margin-bottom: 50px;
   margin-top: 20px;
   width: 75%;
+}
+#search {
+  max-width: 80%;
+  margin: auto;
+  margin-bottom: 5px;
 }
 </style>
