@@ -2,7 +2,14 @@
   <div class="hello">
     <div id="main-wrapper">
       <gmap-map :center="center" :zoom="12" style="width: 90%; height: 450px">
-        <gmap-marker :key="index" v-for="(location, index) in locations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false"></gmap-marker>
+        <gmap-marker :key="index" v-for="(location, index) in locations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="location.visible=true">
+          <gmap-info-window :opened="location.visible" @closeclick="location.visible=false">
+            <b>{{location.name}}</b><br>
+            {{location.address}}<br>
+            {{location.notes}}<br>
+            <b>Replies: </b>{{location.reply}}<br>
+          </gmap-info-window>
+        </gmap-marker>
       </gmap-map>
       <a id="add-button" class="button is-primary" v-on:click="show = true">Add Entry</a>
       <table class="table is-narrow">
@@ -114,21 +121,15 @@ export default {
         lat: '',
         lng: '',
         errors: '',
-        reply: ''
-      },
-      updateLocation: {
-        name: '',
-        address: '',
-        notes: '',
-        lat: '',
-        lng: '',
-        errors: ''
+        reply: '',
+        visible: false
       },
       show: false,
       showReply: false,
       bkClass: 'bk',
       blurClass: 'blur',
-      reply: ''
+      reply: '',
+      visible: false
     }
   },
   methods: {
