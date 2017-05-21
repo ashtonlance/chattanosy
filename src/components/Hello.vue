@@ -24,7 +24,7 @@
               <b>{{place.address}}</b>
               <br>{{place.notes}}
               <br><span class="message">Replies: {{place.reply}}</span>
-              <span class="is-pulled-right" v-on:click="replyToLocation(place)"> REPLY</span>
+              <a class="is-pulled-right" v-on:click="replyToLocation(place)"> REPLY</a>
             </td>
           </tr>
         </tbody>
@@ -51,7 +51,7 @@
                 </p>
                 <p class="control">
                   <label class="label" for="locationNotes">Notes</label>
-                  <textarea type="text" placeholder="Notes about this location" id="locationNotes" class="textarea" v-model="newLocation.notes"></textarea>
+                  <b-input type="textarea" maxlength="100" placeholder="Notes about this location" id="locationNotes" v-model="newLocation.notes"></b-input>
                 </p>
                 <p style="display:none" class="control">
                   <label class="label" for="locationLatitude">Latitude</label>
@@ -86,7 +86,7 @@
               <form id="form" class="field" v-on:submit.prevent="submitReply">
                 <p class="control">
                   <label class="label" for="locationReply">Reply</label>
-                  <textarea type="text" placeholder="Reply" id="locationReply" class="textarea" v-model="reply"></textarea>
+                  <b-input type="textarea" placeholder="Reply" id="locationReply" maxlength="75" v-model="reply"></b-input>
                 </p>
                 <p class="control">
                   <button type="submit" v-on:click="showReply = false" class="button is-primary">Submit</button>
@@ -129,7 +129,8 @@ export default {
       bkClass: 'bk',
       blurClass: 'blur',
       reply: '',
-      visible: false
+      visible: false,
+      search: ''
     }
   },
   methods: {
