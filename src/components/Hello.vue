@@ -176,7 +176,8 @@ export default {
       var self = this
       return self.locations.filter(function (place) {
         return place.name.toLowerCase().indexOf(self.search.toLowerCase()) > -1 || place.notes.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
-        place.reply.toLowerCase().indexOf(self.search.toLowerCase()) > -1
+        place.reply.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
+        place.address.toLowerCase().indexOf(self.search.toLowerCase()) > -1
       })
     }
   }
