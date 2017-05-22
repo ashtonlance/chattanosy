@@ -50,7 +50,7 @@
       </table>
     </div>
     <transition name="fade">
-    <span v-if="scrolled" id="scroll-top" class="tag is-pulled-right is-dark" href="#" v-scroll-to="'#map'">TOP</span>
+    <span v-if="scrolled" id="scroll-top" class="tag is-dark" href="#" v-scroll-to="'#map'">Go to map</span>
     </transition>
     <transition name="fade">
       <div id="modal" class="modal is-active" v-if="show">
@@ -295,8 +295,8 @@ form {
 }
 #scroll-top {
   position: sticky;
-  bottom: 5px;
-  margin-right: 5px;
+  bottom: 25px;
   font-size: 1rem;
+  background: rgba(1, 1, 1, 0.84);
 }
 </style>
