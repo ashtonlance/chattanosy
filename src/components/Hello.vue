@@ -22,10 +22,11 @@
               <a id="add-button" class="button is-primary" v-on:click="show = true">Add an Entry</a>
           </p>
         </b-field>
-      </div>
-      <transition name="fade">
+        <transition name="fade">
         <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
       </transition>
+      </div>
+      
       <table class="table is-narrow" id="location-table">
         <tr>
           <th>Name</th>
