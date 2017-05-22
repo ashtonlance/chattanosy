@@ -37,7 +37,7 @@ export default {
 
 <style scoped>
 .about {
-  padding-top: 50px;
+  padding-top: 25px;
   margin-bottom: 50px;
 }
 p {

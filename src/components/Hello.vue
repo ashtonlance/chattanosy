@@ -19,14 +19,14 @@
         <b-field class="is-pulled-right" id="controls" style="margin-bottom:1.5rem;">
           <b-input id="search" placeholder="Type to search" type="input" v-model="search"></b-input>
           <p class="control">
-              <a id="add-button" class="button is-primary" v-on:click="show = true">Add an Entry</a>
+            <a id="add-button" class="button is-primary" v-on:click="show = true">Add an Entry</a>
           </p>
         </b-field>
         <transition name="fade">
-        <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
-      </transition>
+          <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
+        </transition>
       </div>
-      
+  
       <table class="table is-narrow" id="location-table">
         <tr>
           <th>Name</th>
@@ -34,11 +34,15 @@
         </tr>
         <tbody>
           <tr v-for="location in filteredLocations" @mousedown="location.visible=true">
-            <td>{{location.name}}</td>
+            <td>{{location.name}}
+              <br>
+              <div style="font-size:.75rem;">Added: {{location.created}}</div>
+            </td>
             <td>
               <b>{{location.address}}</b>
               <br>{{location.notes}}
-              <br><span class="message">Replies: {{location.reply}}</span>
+              <br>
+              <span class="message">Replies: {{location.reply}}</span>
               <a class="is-pulled-right" v-on:click="replyToLocation(location)"> REPLY</a>
             </td>
           </tr>
@@ -62,7 +66,7 @@
                 </p>
                 <p class="control">
                   <label class="label" for="locationAddress">Address</label>
-                  <input type="text" placeholder="Street number and street name only" id="locationAddress" class="input" v-model="newLocation.address">
+                  <input type="text" placeholder="123 Main St" id="locationAddress" class="input" v-model="newLocation.address">
                 </p>
                 <p class="control">
                   <label class="label" for="locationNotes">Notes</label>
@@ -82,9 +86,6 @@
               </form>
             </div>
           </section>
-          <footer class="modal-card-foot is-centered">
-            <a style="margin:auto" class="button is-dark" href="mailto:ashton@ashtonlance.com">contact the dev</a>
-          </footer>
         </div>
       </div>
     </transition>
@@ -138,7 +139,8 @@ export default {
         lng: '',
         errors: '',
         reply: '',
-        visible: false
+        visible: false,
+        created: ''
       },
       show: false,
       showReply: false,
@@ -160,6 +162,22 @@ export default {
         .then(response => {
           this.newLocation.lat = response.data.results[0].geometry.location.lat
           this.newLocation.lng = response.data.results[0].geometry.location.lng
+
+          var today = new Date()
+          var dd = today.getDate()
+          var mm = today.getMonth() + 1
+          var yyyy = today.getFullYear()
+
+          if (dd < 10) {
+            dd = '0' + dd
+          }
+
+          if (mm < 10) {
+            mm = '0' + mm
+          }
+
+          today = mm + '/' + dd + '/' + yyyy
+          this.newLocation.created = today
           locationsRef.push(this.newLocation)
           this.newLocation.name = ''
           this.newLocation.address = ''
@@ -188,22 +206,19 @@ export default {
   },
   mounted: function () {
     miniToastr.init()
-    var x = document.getElementById('location-table').rows.length
-    console.log(x)
   },
   computed: {
     filteredLocations: function () {
       var self = this
       return self.locations.filter(function (location) {
         return location.name.toLowerCase().indexOf(self.search.toLowerCase()) > -1 || location.notes.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
-        location.reply.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
-        location.address.toLowerCase().indexOf(self.search.toLowerCase()) > -1
+          location.reply.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
+          location.address.toLowerCase().indexOf(self.search.toLowerCase()) > -1
       })
     }
   },
   updated: function () {
     var x = document.getElementById('location-table').rows.length - 1
-    console.log(x, this.locations.length)
     if (x === this.locations.length) {
       let loader = document.getElementById('loader')
       loader.style.display = 'none'
@@ -214,7 +229,7 @@ export default {
 
 <style scoped>
 .hello {
-  padding-top: 50px;
+  padding-top: 25px;
 }
 
 #main-wrapper {
@@ -258,7 +273,7 @@ form {
   margin: auto;
   margin-bottom: 50px;
   margin-top: 20px;
-  width: 75%;
+  width: 95%;
 }
 
 #table-header {
