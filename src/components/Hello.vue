@@ -15,7 +15,8 @@
       </gmap-map>
       <a id="add-button" class="button is-primary" v-on:click="show = true">Add Entry</a>
       <b-input id="search" placeholder="Type to search" type="input" v-model="search"></b-input>
-      <table class="table is-narrow">
+      <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
+      <table class="table is-narrow" id="location-table">
         <tr>
           <th>Name</th>
           <th>Address/Info</th>
@@ -107,6 +108,7 @@
 import db from '../db'
 import axios from 'axios'
 import miniToastr from 'mini-toastr'
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 let locationsRef = db.ref('locations/')
 let placeToUpdate
 export default {
@@ -133,8 +135,13 @@ export default {
       blurClass: 'blur',
       reply: '',
       visible: false,
-      search: ''
+      search: '',
+      color: '#42b983',
+      size: '30px'
     }
+  },
+  components: {
+    PulseLoader
   },
   methods: {
     addLocation: function () {
@@ -170,6 +177,8 @@ export default {
   },
   mounted: function () {
     miniToastr.init()
+    var x = document.getElementById('location-table').rows.length
+    console.log(x)
   },
   computed: {
     filteredLocations: function () {
@@ -179,6 +188,14 @@ export default {
         location.reply.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
         location.address.toLowerCase().indexOf(self.search.toLowerCase()) > -1
       })
+    }
+  },
+  updated: function () {
+    var x = document.getElementById('location-table').rows.length - 1
+    console.log(x, this.locations.length)
+    if (x === this.locations.length) {
+      let loader = document.getElementById('loader')
+      loader.style.display = 'none'
     }
   }
 }
