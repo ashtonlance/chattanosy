@@ -2,7 +2,7 @@
   <div class="hello">
     <div id="main-wrapper">
       <gmap-map :center="center" :zoom="12" style="width: 90%; height: 450px">
-        <gmap-marker :key="index" v-for="(location, index) in locations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="location.visible=true">
+        <gmap-marker :key="index" v-for="(location, index) in filteredLocations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="location.visible=true">
           <gmap-info-window :opened="location.visible" @closeclick="location.visible=false">
             <b>{{location.name}}</b>
             <br> {{location.address}}
@@ -21,13 +21,13 @@
           <th>Address/Info</th>
         </tr>
         <tbody>
-          <tr v-for="place in filteredLocations">
-            <td>{{place.name}}</td>
+          <tr v-for="location in filteredLocations" @mousedown="location.visible=true">
+            <td>{{location.name}}</td>
             <td>
-              <b>{{place.address}}</b>
-              <br>{{place.notes}}
-              <br><span class="message">Replies: {{place.reply}}</span>
-              <a class="is-pulled-right" v-on:click="replyToLocation(place)"> REPLY</a>
+              <b>{{location.address}}</b>
+              <br>{{location.notes}}
+              <br><span class="message">Replies: {{location.reply}}</span>
+              <a class="is-pulled-right" v-on:click="replyToLocation(location)"> REPLY</a>
             </td>
           </tr>
         </tbody>
@@ -155,9 +155,9 @@ export default {
           miniToastr.error('Something went wrong!')
         })
     },
-    replyToLocation: function (place) {
+    replyToLocation: function (location) {
       this.showReply = true
-      placeToUpdate = place['.key'].toString()
+      placeToUpdate = location['.key'].toString()
     },
     submitReply: function () {
       let replyTo = locationsRef.child(placeToUpdate)
@@ -174,10 +174,10 @@ export default {
   computed: {
     filteredLocations: function () {
       var self = this
-      return self.locations.filter(function (place) {
-        return place.name.toLowerCase().indexOf(self.search.toLowerCase()) > -1 || place.notes.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
-        place.reply.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
-        place.address.toLowerCase().indexOf(self.search.toLowerCase()) > -1
+      return self.locations.filter(function (location) {
+        return location.name.toLowerCase().indexOf(self.search.toLowerCase()) > -1 || location.notes.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
+        location.reply.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
+        location.address.toLowerCase().indexOf(self.search.toLowerCase()) > -1
       })
     }
   }
