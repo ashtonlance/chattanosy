@@ -2,7 +2,7 @@
   <div class="hello">
     <div id="main-wrapper">
       <h1 class="has-text-left title" style="padding-left: 25px;">What's new in Chattanooga?</h1>
-      <gmap-map :center="center" :zoom="12" style="width: 90%; height: 450px">
+      <gmap-map id="map" :center="center" :zoom="12" style="width: 90%; height: 450px">
         <gmap-marker :key="index" v-for="(location, index) in filteredLocations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="location.visible=true">
           <gmap-info-window :opened="location.visible" @closeclick="location.visible=false">
             <b>{{location.name}}</b>
@@ -49,6 +49,9 @@
         </tbody>
       </table>
     </div>
+    <transition name="fade">
+    <span v-if="scrolled" id="scroll-top" class="tag is-pulled-right is-dark" href="#" v-scroll-to="'#map'">TOP</span>
+    </transition>
     <transition name="fade">
       <div id="modal" class="modal is-active" v-if="show">
         <div class="modal-background"></div>
@@ -150,7 +153,8 @@ export default {
       visible: false,
       search: '',
       color: '#42b983',
-      size: '30px'
+      size: '30px',
+      scrolled: false
     }
   },
   components: {
@@ -202,10 +206,14 @@ export default {
       })
       miniToastr.success('Reply submitted!')
       this.reply = ''
+    },
+    handleScroll () {
+      this.scrolled = window.scrollY > 600
     }
   },
   mounted: function () {
     miniToastr.init()
+    window.addEventListener('scroll', this.handleScroll)
   },
   computed: {
     filteredLocations: function () {
@@ -223,6 +231,9 @@ export default {
       let loader = document.getElementById('loader')
       loader.style.display = 'none'
     }
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.handleScroll)
   }
 }
 </script>
@@ -281,5 +292,11 @@ form {
   margin: 50px auto;
   padding-left: 10%;
   padding-right: 10%;
+}
+#scroll-top {
+  position: sticky;
+  bottom: 5px;
+  margin-right: 5px;
+  font-size: 1rem;
 }
 </style>

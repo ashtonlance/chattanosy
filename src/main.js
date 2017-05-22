@@ -10,6 +10,7 @@ import 'buefy/lib/buefy.css'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import miniToastr from 'mini-toastr'
 import VueAnalytics from 'vue-analytics'
+import VueScrollTo from 'vue-scrollto'
 
 Vue.use(VueGoogleMaps, {
   load: {
@@ -24,6 +25,7 @@ Vue.use(VueAnalytics, {
 Vue.use(VueFire)
 Vue.use(Buefy)
 Vue.use(miniToastr)
+Vue.use(VueScrollTo)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
