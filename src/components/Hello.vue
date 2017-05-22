@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     <div id="main-wrapper">
+      <h1 class="has-text-left title" style="padding-left: 25px;">What's new in Chattanooga?</h1>
       <gmap-map :center="center" :zoom="12" style="width: 90%; height: 450px">
         <gmap-marker :key="index" v-for="(location, index) in filteredLocations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="location.visible=true">
           <gmap-info-window :opened="location.visible" @closeclick="location.visible=false">
@@ -13,9 +14,18 @@
           </gmap-info-window>
         </gmap-marker>
       </gmap-map>
-      <a id="add-button" class="button is-primary" v-on:click="show = true">Add Entry</a>
-      <b-input id="search" placeholder="Type to search" type="input" v-model="search"></b-input>
-      <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
+      <div id="table-header">
+        <h1 class="subtitle is-pulled-left">Chattanoogans are nosy about:</h1>
+        <b-field class="is-pulled-right" id="controls" style="margin-bottom:1.5rem;">
+          <b-input id="search" placeholder="Type to search" type="input" v-model="search"></b-input>
+          <p class="control">
+              <a id="add-button" class="button is-primary" v-on:click="show = true">Add an Entry</a>
+          </p>
+        </b-field>
+      </div>
+      <transition name="fade">
+        <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
+      </transition>
       <table class="table is-narrow" id="location-table">
         <tr>
           <th>Name</th>
@@ -215,7 +225,7 @@ export default {
 }
 
 #add-button {
-  margin: 25px 25px;
+  margin: 0 5px;
 }
 
 table {
@@ -249,9 +259,11 @@ form {
   margin-top: 20px;
   width: 75%;
 }
-#search {
-  max-width: 80%;
-  margin: auto;
-  margin-bottom: 5px;
+
+#table-header {
+  width: auto;
+  margin: 50px auto;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 </style>
