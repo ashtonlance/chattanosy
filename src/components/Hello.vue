@@ -42,8 +42,8 @@
               <b>{{location.address}}</b>
               <br>{{location.notes}}
               <br>
-              <span class="message">Replies: {{location.reply}}</span>
-              <a class="is-pulled-right" v-on:click="replyToLocation(location)"> REPLY</a>
+              <span class="message">Reply: {{location.reply}}</span>
+              <a class="is-pulled-right" v-on:click="replyToLocation(location)"> + Reply</a>
             </td>
           </tr>
         </tbody>
@@ -294,9 +294,10 @@ form {
   padding-right: 10%;
 }
 #scroll-top {
-  position: sticky;
+  position: fixed;
   bottom: 25px;
+  right: 20px;
   font-size: 1rem;
-  background: rgba(1, 1, 1, 0.84);
+  background: rgba(1, 1, 1, 0.80);
 }
 </style>
