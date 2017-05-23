@@ -15,18 +15,18 @@
         </gmap-marker>
       </gmap-map>
       <div id="table-header">
-        <h1 class="subtitle is-pulled-left">Chattanoogans are nosy about:</h1>
+        <h1 class="subtitle is-4 is-pulled-left">Chattanoogans are nosy about:</h1>
         <b-field class="is-pulled-right" id="controls" style="margin-bottom:1.5rem;">
           <b-input id="search" placeholder="Type to search" type="input" v-model="search"></b-input>
           <p class="control">
             <a id="add-button" class="button is-primary" v-on:click="show = true">Add an Entry</a>
           </p>
         </b-field>
+        <br>
         <transition name="fade">
           <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
         </transition>
-      </div>
-  
+      </div>  
       <table class="table is-narrow" id="location-table">
         <tr>
           <th>Name</th>
@@ -39,7 +39,7 @@
               <div style="font-size:.75rem;">Added: {{location.created}}</div>
             </td>
             <td>
-              <b>{{location.address}}</b>
+              {{location.address}}
               <br>{{location.notes}}
               <br>
               <span class="message">Reply: {{location.reply}}</span>
@@ -48,9 +48,10 @@
           </tr>
         </tbody>
       </table>
+      <div class="subtitle is-5">Tip: clicking a row opens the location details on the map</div>
     </div>
     <transition name="fade">
-    <span v-if="scrolled" id="scroll-top" class="tag is-dark" href="#" v-scroll-to="'#map'">Go to map</span>
+    <span v-if="scrolled" id="scroll-top" class="tag is-dark" href="#" v-scroll-to="'#map'">Scroll to map</span>
     </transition>
     <transition name="fade">
       <div id="modal" class="modal is-active" v-if="show">
@@ -291,8 +292,8 @@ form {
 #table-header {
   width: auto;
   margin: 50px auto;
-  padding-left: 10%;
-  padding-right: 10%;
+  padding-left: 7%;
+  padding-right: 7%;
 }
 #scroll-top {
   position: fixed;
@@ -300,5 +301,11 @@ form {
   right: 20px;
   font-size: 1rem;
   background: rgba(1, 1, 1, 0.80);
+}
+
+@media (max-width: 375px) {
+  .subtitle {
+    font-size: 1.25rem !important;
+  }
 }
 </style>
