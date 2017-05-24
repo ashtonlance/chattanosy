@@ -11,6 +11,7 @@ import * as VueGoogleMaps from 'vue2-google-maps'
 import miniToastr from 'mini-toastr'
 import VueAnalytics from 'vue-analytics'
 import VueScrollTo from 'vue-scrollto'
+import vueFilter from 'vue-filter'
 
 Vue.use(VueGoogleMaps, {
   load: {
@@ -26,6 +27,7 @@ Vue.use(VueFire)
 Vue.use(Buefy)
 Vue.use(miniToastr)
 Vue.use(VueScrollTo)
+Vue.use(vueFilter)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

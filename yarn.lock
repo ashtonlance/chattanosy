@@ -4535,6 +4535,12 @@ vue-dialog@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/vue-dialog/-/vue-dialog-0.0.3.tgz#ec820af86f26f43a7c3cdc3ffe70d18829dc4271"
 
+vue-filter@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/vue-filter/-/vue-filter-0.2.1.tgz#598582f5309c60f43482462bb9485fe667d8a241"
+  dependencies:
+    underscore "^1.8.3"
+
 vue-hot-reload-api@^2.0.11:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.1.0.tgz#9ca58a6e0df9078554ce1708688b6578754d86de"
