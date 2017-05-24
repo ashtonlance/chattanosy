@@ -11,7 +11,7 @@
         <li>Add ability to use current location (good for mobile)</li>
         <li>Add logo/branding</li>
         <li>Add new posts/reply email notifications</li>
-        <li>Add catergoies/filtering</li>
+        <li>Add catergories/filtering</li>
       </ul>
     </div>
   </div>
