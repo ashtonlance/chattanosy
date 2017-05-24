@@ -20,14 +20,13 @@
     "toastr": "^2.1.2",
     "vue": "^2.2.6",
     "vue-analytics": "^4.1.2",
-    "vue-dialog": "^0.0.3",
     "vue-filter": "^0.2.1",
     "vue-router": "^2.3.1",
     "vue-scrollto": "^2.6.8",
     "vue-spinner": "^1.0.2",
     "vue-toast": "^3.1.0",
     "vue2-google-maps": "^0.7.5",
-    "vuefire": "^1.4.2"
+    "vuefire": "^1.4.3"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

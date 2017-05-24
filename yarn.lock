@@ -4531,10 +4531,6 @@ vue-analytics@^4.1.2:
   dependencies:
     load-script "^1.0.0"
 
-vue-dialog@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/vue-dialog/-/vue-dialog-0.0.3.tgz#ec820af86f26f43a7c3cdc3ffe70d18829dc4271"
-
 vue-filter@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/vue-filter/-/vue-filter-0.2.1.tgz#598582f5309c60f43482462bb9485fe667d8a241"
@@ -4610,9 +4606,9 @@ vue@^2.1.0, vue@^2.2.6, vue@^2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.3.3.tgz#d1eaa8fde5240735a4563e74f2c7fead9cbb064c"
 
-vuefire@^1.4.2:
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/vuefire/-/vuefire-1.4.2.tgz#ff4daa9cc5943090ed5d736ad1337e93fa693671"
+vuefire@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/vuefire/-/vuefire-1.4.3.tgz#6ad02e10d191efefbc1ca78da1611772289ff74c"
 
 watchpack@^1.3.1:
   version "1.3.1"
