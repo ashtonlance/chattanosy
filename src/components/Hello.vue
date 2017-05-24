@@ -42,7 +42,9 @@
               {{location.address}}
               <br>{{location.notes}}
               <br>
-              <span class="message">Reply: {{location.reply}}</span>
+              <div v-for="replies in location.replies">
+              <span class="message">Reply: {{replies.reply}}</span>
+              </div>
               <a class="is-pulled-right" v-on:click="replyToLocation(location)"> + Reply</a>
             </td>
           </tr>
@@ -142,7 +144,7 @@ export default {
         lat: '',
         lng: '',
         errors: '',
-        reply: '',
+        replies: '',
         visible: false,
         created: ''
       },
@@ -151,6 +153,7 @@ export default {
       bkClass: 'bk',
       blurClass: 'blur',
       reply: '',
+      replies: '',
       visible: false,
       search: '',
       color: '#42b983',
@@ -173,16 +176,14 @@ export default {
           var dd = today.getDate()
           var mm = today.getMonth() + 1
           var yyyy = today.getFullYear()
-
           if (dd < 10) {
             dd = '0' + dd
           }
-
           if (mm < 10) {
             mm = '0' + mm
           }
-
           today = mm + '/' + dd + '/' + yyyy
+
           this.newLocation.created = today
           locationsRef.push(this.newLocation)
           this.newLocation.name = ''
@@ -202,8 +203,8 @@ export default {
       placeToUpdate = location['.key'].toString()
     },
     submitReply: function () {
-      let replyTo = locationsRef.child(placeToUpdate)
-      replyTo.update({
+      let replyTo = locationsRef.child(placeToUpdate).child('replies').push()
+      replyTo.set({
         'reply': this.reply
       })
       miniToastr.success('Reply submitted!')
