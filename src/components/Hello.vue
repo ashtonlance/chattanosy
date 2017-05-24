@@ -223,7 +223,6 @@ export default {
       var self = this
       return self.locations.filter(function (location) {
         return location.name.toLowerCase().indexOf(self.search.toLowerCase()) > -1 || location.notes.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
-          location.reply.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
           location.address.toLowerCase().indexOf(self.search.toLowerCase()) > -1
       })
     }
