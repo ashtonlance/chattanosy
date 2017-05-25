@@ -9,7 +9,9 @@
             <br> {{location.address}}
             <br> {{location.notes}}
             <br>
-            <b>Replies: </b>{{location.reply}}
+            <div v-for="replies in location.replies">
+              <span class="message">Reply: {{replies.reply}}</span>
+            </div>
             <br>
           </gmap-info-window>
         </gmap-marker>
@@ -26,7 +28,7 @@
         <transition name="fade">
           <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
         </transition>
-      </div>  
+      </div>
       <table class="table is-narrow" id="location-table">
         <tr>
           <th>Name</th>
@@ -43,7 +45,7 @@
               <br>{{location.notes}}
               <br>
               <div v-for="replies in location.replies">
-              <span class="message">Reply: {{replies.reply}}</span>
+                <span class="message">Reply: {{replies.reply}}</span>
               </div>
               <a class="is-pulled-right" v-on:click="replyToLocation(location)"> + Reply</a>
             </td>
@@ -53,7 +55,7 @@
       <div class="subtitle is-5">Tip: clicking a row opens the location details on the map</div>
     </div>
     <transition name="fade">
-    <span v-if="scrolled" id="scroll-top" class="tag is-dark" href="#" v-scroll-to="'#map'">Scroll to map</span>
+      <span v-if="scrolled" id="scroll-top" class="tag is-dark" href="#" v-scroll-to="'#map'">Scroll to map</span>
     </transition>
     <transition name="fade">
       <div id="modal" class="modal is-active" v-if="show">
@@ -159,7 +161,7 @@ export default {
       color: '#42b983',
       size: '30px',
       scrolled: false,
-      options: {scrollwheel: false}
+      options: { scrollwheel: false }
     }
   },
   components: {
@@ -295,6 +297,7 @@ form {
   padding-left: 7%;
   padding-right: 7%;
 }
+
 #scroll-top {
   position: fixed;
   bottom: 25px;
