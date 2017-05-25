@@ -63,7 +63,7 @@
         <div class="modal-card">
           <header class="modal-card-head">
             <p class="modal-card-title">CHATTANOSY</p>
-            <button id="closeModal" class="delete" v-on:click="show = false"></button>
+            <button id="closeModal" class="delete" v-on:click="show = false, usingCurrentLocation = false"></button>
           </header>
           <section class="modal-card-body">
             <div class="content">
@@ -72,21 +72,28 @@
                   <label class="label" for="locationName">Name</label>
                   <input type="text" placeholder="Name of this location" id="locationName" class="input" v-model="newLocation.name">
                 </p>
-                <p class="control">
+                <p v-if="!usingCurrentLocation" class="control">
                   <label class="label" for="locationAddress">Address</label>
                   <input type="text" placeholder="123 Main St" id="locationAddress" class="input" v-model="newLocation.address">
                 </p>
+                <div class="field is-horizontal">
+                  <div class="field-body">
+                  <p v-if="usingCurrentLocation" class="control">
+                    <label class="label" for="locationLatitude">Latitude</label>
+                    <input type="text" id="locationLatitude" class="input" v-model="newLocation.lat">
+                  </p>
+                  <p v-if="usingCurrentLocation" class="control">
+                    <label class="label" for="locationLongitude">Longitude</label>
+                    <input type="text" id="locationLongitude" class="input" v-model="newLocation.lng">
+                  </p>
+                  </div>                                
+                </div>
+                <p class="control">
+                  <a v-bind:class="{ 'is-loading': isLoading }" v-on:click="getLocation()" class="button is-primary">Use Current Location</a>
+                </p>  
                 <p class="control">
                   <label class="label" for="locationNotes">Notes</label>
                   <b-input type="textarea" maxlength="100" placeholder="Notes about this location" id="locationNotes" v-model="newLocation.notes"></b-input>
-                </p>
-                <p style="display:none" class="control">
-                  <label class="label" for="locationLatitude">Latitude</label>
-                  <input type="text" id="locationLatitude" class="input" v-model="newLocation.lat">
-                </p>
-                <p style="display:none" class="control">
-                  <label class="label" for="locationLongitude">Longitude</label>
-                  <input type="text" id="locationLongitude" class="input" v-model="newLocation.lng">
                 </p>
                 <p class="control">
                   <button type="submit" v-on:click="show = false" class="button is-primary">Submit</button>
@@ -161,7 +168,9 @@ export default {
       color: '#42b983',
       size: '30px',
       scrolled: false,
-      options: { scrollwheel: false }
+      options: { scrollwheel: false },
+      isLoading: false,
+      usingCurrentLocation: false
     }
   },
   components: {
@@ -171,8 +180,13 @@ export default {
     addLocation: function () {
       axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=` + this.newLocation.address + ',+Chattanooga,+TN&key=AIzaSyDni8xEY3eGI6q0ewpUjxYfQyvjJeDbbQo')
         .then(response => {
-          this.newLocation.lat = response.data.results[0].geometry.location.lat
-          this.newLocation.lng = response.data.results[0].geometry.location.lng
+          if (this.newLocation.lat === '') {
+            this.newLocation.lat = response.data.results[0].geometry.location.lat
+            this.newLocation.lng = response.data.results[0].geometry.location.lng
+          }
+          if (this.newLocation.address === '') {
+            this.newLocation.address = this.newLocation.lat + ', ' + this.newLocation.lng
+          }
 
           var today = new Date()
           var dd = today.getDate()
@@ -193,6 +207,7 @@ export default {
           this.newLocation.notes = ''
           this.newLocation.lat = ''
           this.newLocation.lng = ''
+          this.usingCurrentLocation = false
           miniToastr.success('Location successfully added!')
         })
         .catch(e => {
@@ -214,6 +229,16 @@ export default {
     },
     handleScroll () {
       this.scrolled = window.scrollY > 600
+    },
+    getLocation: function () {
+      let that = this
+      this.isLoading = true
+      this.usingCurrentLocation = true
+      navigator.geolocation.getCurrentPosition(function (position) {
+        that.newLocation.lat = position.coords.latitude
+        that.newLocation.lng = position.coords.longitude
+        that.isLoading = false
+      })
     }
   },
   mounted: function () {

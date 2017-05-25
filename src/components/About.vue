@@ -8,7 +8,7 @@
         <h1>Todo List:</h1>
         <li><del>Add ability for users to reply to orginal post</del></li>
         <li>Add ability to edit posts (by the orginal user only)</li>
-        <li>Add ability to use current location (good for mobile)</li>
+        <li><del>Add ability to use current location (good for mobile)</del></li>
         <li>Add logo/branding</li>
         <li>Add new posts/reply email notifications</li>
         <li>Add catergories/filtering</li>
