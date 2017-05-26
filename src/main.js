@@ -12,7 +12,6 @@ import miniToastr from 'mini-toastr'
 import VueAnalytics from 'vue-analytics'
 import VueScrollTo from 'vue-scrollto'
 import VuePaginate from 'vue-paginate'
-import vueFilter from 'vue-filter'
 
 Vue.use(VueGoogleMaps, {
   load: {
@@ -28,7 +27,6 @@ Vue.use(Buefy)
 Vue.use(miniToastr)
 Vue.use(VueScrollTo)
 Vue.use(VuePaginate)
-Vue.use(vueFilter)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
