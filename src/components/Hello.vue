@@ -29,13 +29,20 @@
           <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
         </transition>
       </div>
+      <paginate-links for="rows" :async="true"></paginate-links>
+      <br>
+      <paginate
+        name="rows"
+        :list="filteredLocations"
+        :per="10"
+        >        
       <table class="table is-narrow" id="location-table">
         <tr>
           <th>Name</th>
           <th>Address/Info</th>
         </tr>
         <tbody>
-          <tr v-for="location in filteredLocations" @mousedown="location.visible=true">
+          <tr v-for="location in paginated('rows')" @mousedown="location.visible=true">
             <td>{{location.name}}
               <br>
               <div style="font-size:.75rem;">Added: {{location.created}}</div>
@@ -52,6 +59,7 @@
           </tr>
         </tbody>
       </table>
+      </paginate>
       <div class="subtitle is-5">Tip: clicking a row opens the location details on the map</div>
     </div>
     <transition name="fade">
@@ -76,6 +84,9 @@
                   <label class="label" for="locationAddress">Address</label>
                   <input type="text" placeholder="123 Main St" id="locationAddress" class="input" v-model="newLocation.address">
                 </p>
+                <p class="control">
+                  <a v-bind:class="{ 'is-loading': isLoading }" v-on:click="getLocation()" class="button is-primary">Use Current Location</a>
+                </p>
                 <div class="field is-horizontal">
                   <div class="field-body">
                   <p v-if="usingCurrentLocation" class="control">
@@ -86,11 +97,8 @@
                     <label class="label" for="locationLongitude">Longitude</label>
                     <input type="text" id="locationLongitude" class="input" v-model="newLocation.lng">
                   </p>
-                  </div>                                
+                  </div>
                 </div>
-                <p class="control">
-                  <a v-bind:class="{ 'is-loading': isLoading }" v-on:click="getLocation()" class="button is-primary">Use Current Location</a>
-                </p>  
                 <p class="control">
                   <label class="label" for="locationNotes">Notes</label>
                   <b-input type="textarea" maxlength="100" placeholder="Notes about this location" id="locationNotes" v-model="newLocation.notes"></b-input>
@@ -159,8 +167,6 @@ export default {
       },
       show: false,
       showReply: false,
-      bkClass: 'bk',
-      blurClass: 'blur',
       reply: '',
       replies: '',
       visible: false,
@@ -170,7 +176,8 @@ export default {
       scrolled: false,
       options: { scrollwheel: false },
       isLoading: false,
-      usingCurrentLocation: false
+      usingCurrentLocation: false,
+      paginate: ['rows']
     }
   },
   components: {
@@ -251,7 +258,7 @@ export default {
       return self.locations.filter(function (location) {
         return location.name.toLowerCase().indexOf(self.search.toLowerCase()) > -1 || location.notes.toLowerCase().indexOf(self.search.toLowerCase()) > -1 ||
           location.address.toLowerCase().indexOf(self.search.toLowerCase()) > -1
-      })
+      }).reverse()
     }
   },
   updated: function () {
