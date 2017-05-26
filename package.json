@@ -18,6 +18,7 @@
     "jquery": "^3.2.1",
     "mini-toastr": "^0.6.5",
     "toastr": "^2.1.2",
+    "uncss-webpack-plugin": "^0.1.1",
     "vue": "^2.2.6",
     "vue-analytics": "^4.1.2",
     "vue-filter": "^0.2.1",
