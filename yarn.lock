@@ -4558,6 +4558,12 @@ vue-loader@^11.3.4:
     vue-style-loader "^2.0.0"
     vue-template-es2015-compiler "^1.2.2"
 
+vue-paginate@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/vue-paginate/-/vue-paginate-3.5.0.tgz#ca849431dab2f5abae10998da33858b40abc60de"
+  dependencies:
+    vue "2.3.3"
+
 vue-router@^2.3.1:
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-2.5.3.tgz#073783f564b6aece6c8a59c63e298dc2aabfb51b"
@@ -4602,7 +4608,7 @@ vue2-google-maps@^0.7.5:
     babel-runtime "^5.8.0"
     marker-clusterer-plus "^2.1.4"
 
-vue@^2.1.0, vue@^2.2.6, vue@^2.3.3:
+vue@2.3.3, vue@^2.1.0, vue@^2.2.6, vue@^2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.3.3.tgz#d1eaa8fde5240735a4563e74f2c7fead9cbb064c"
 
