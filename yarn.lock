@@ -4606,7 +4606,7 @@ uncss-webpack-plugin@^0.1.1:
     uncss vseventer/uncss#jsdom
     webpack-sources "0.2.x"
 
-"uncss@github:vseventer/uncss#jsdom":
+uncss@vseventer/uncss#jsdom:
   version "0.14.1"
   resolved "https://codeload.github.com/vseventer/uncss/tar.gz/6a6488a547e5c28d2935b1e26b9cc9ef78b6e431"
   dependencies:

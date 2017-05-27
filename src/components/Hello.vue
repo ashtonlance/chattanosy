@@ -16,7 +16,7 @@
           </gmap-info-window>
         </gmap-marker>
       </gmap-map>
-      <div id="table-header">
+      <div class="box" id="table-header">
         <h1 class="subtitle is-4 is-pulled-left">Chattanoogans are nosy about:</h1>
         <b-field class="is-pulled-right" id="controls" style="margin-bottom:1.5rem;">
           <b-input id="search" placeholder="Type to search" type="input" v-model="search"></b-input>
@@ -25,40 +25,41 @@
           </p>
         </b-field>
         <br>
-        <transition name="fade">
-          <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
-        </transition>
-      </div>
-      <paginate-links for="rows" :async="true"></paginate-links>
+    <transition name="fade">
+        <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
+      </transition>
       <br>
-      <paginate
-        name="rows"
-        :list="filteredLocations"
-        :per="10"
-        >        
-      <table class="table is-narrow" id="location-table">
-        <tr>
-          <th>Name</th>
-          <th>Address/Info</th>
-        </tr>
-        <tbody>
-          <tr v-for="location in paginated('rows')" @mousedown="location.visible=true">
-            <td>{{location.name}}
-              <br>
-              <div style="font-size:.75rem;">Added: {{location.created}}</div>
-            </td>
-            <td>
-              {{location.address}}
-              <br>{{location.notes}}
-              <br>
-              <div v-for="replies in location.replies">
-                <span class="message">Reply: {{replies.reply}}</span>
-              </div>
-              <a class="is-pulled-right" v-on:click="replyToLocation(location)"> + Reply</a>
-            </td>
+        <paginate-links for="rows" :async="true"></paginate-links>
+        <br>
+        <div id="results-info" v-if="$refs.paginator">
+          Viewing {{$refs.paginator.pageItemsCount}} results
+        </div>
+      </div>
+      <br>
+      <paginate name="rows" :list="filteredLocations" :per="10" ref="paginator">
+        <table class="table is-narrow" id="location-table">
+          <tr>
+            <th>Name</th>
+            <th>Address/Info</th>
           </tr>
-        </tbody>
-      </table>
+          <tbody>
+            <tr v-for="location in paginated('rows')" @mousedown="location.visible=true">
+              <td>{{location.name}}
+                <br>
+                <div style="font-size:.75rem;">Added: {{location.created}}</div>
+              </td>
+              <td>
+                {{location.address}}
+                <br>{{location.notes}}
+                <br>
+                <div v-for="replies in location.replies">
+                  <span class="message">Reply: {{replies.reply}}</span>
+                </div>
+                <a class="is-pulled-right" v-on:click="replyToLocation(location)"> + Reply</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </paginate>
       <div class="subtitle is-5">Tip: clicking a row opens the location details on the map</div>
     </div>
@@ -89,14 +90,14 @@
                 </p>
                 <div class="field is-horizontal">
                   <div class="field-body">
-                  <p v-if="usingCurrentLocation" class="control">
-                    <label class="label" for="locationLatitude">Latitude</label>
-                    <input type="text" id="locationLatitude" class="input" v-model="newLocation.lat">
-                  </p>
-                  <p v-if="usingCurrentLocation" class="control">
-                    <label class="label" for="locationLongitude">Longitude</label>
-                    <input type="text" id="locationLongitude" class="input" v-model="newLocation.lng">
-                  </p>
+                    <p v-if="usingCurrentLocation" class="control">
+                      <label class="label" for="locationLatitude">Latitude</label>
+                      <input type="text" id="locationLatitude" class="input" v-model="newLocation.lat">
+                    </p>
+                    <p v-if="usingCurrentLocation" class="control">
+                      <label class="label" for="locationLongitude">Longitude</label>
+                      <input type="text" id="locationLongitude" class="input" v-model="newLocation.lng">
+                    </p>
                   </div>
                 </div>
                 <p class="control">
@@ -234,7 +235,7 @@ export default {
       miniToastr.success('Reply submitted!')
       this.reply = ''
     },
-    handleScroll () {
+    handleScroll: function () {
       this.scrolled = window.scrollY > 600
     },
     getLocation: function () {
@@ -326,6 +327,7 @@ form {
 #table-header {
   width: auto;
   margin: 50px auto;
+  margin-bottom: 15px;
   padding-left: 7%;
   padding-right: 7%;
 }
@@ -336,6 +338,15 @@ form {
   right: 20px;
   font-size: 1rem;
   background: rgba(1, 1, 1, 0.80);
+}
+
+#table-header > ul {
+  display: inline-block;
+}
+
+#results-info {
+  margin-top: 15px;
+  margin-bottom: 0;
 }
 
 @media (max-width: 375px) {
