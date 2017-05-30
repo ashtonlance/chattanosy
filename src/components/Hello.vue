@@ -264,9 +264,11 @@ export default {
   },
   updated: function () {
     var x = document.getElementById('location-table').rows.length - 1
-    if (x === this.locations.length) {
-      let loader = document.getElementById('loader')
-      loader.style.display = 'none'
+    if (x !== 0) {
+      if (x === 10) {
+        let loader = document.getElementById('loader')
+        loader.style.display = 'none'
+      }
     }
   },
   destroyed () {
