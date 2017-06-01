@@ -102,7 +102,11 @@
                 </div>
                 <p class="control">
                   <label class="label" for="locationNotes">Notes</label>
-                  <b-input type="textarea" maxlength="100" placeholder="Notes about this location" id="locationNotes" v-model="newLocation.notes"></b-input>
+                  <b-input type="textarea" maxlength="125" placeholder="Notes about this location" id="locationNotes" v-model="newLocation.notes"></b-input>
+                </p>
+                <p>
+                  If you're posting a URL, please use a shortened link from: <a href="https://bitly.com" target="_blank">bitly.com</a><br>
+                  This helps keeps everything looking tidy.
                 </p>
                 <p class="control">
                   <button type="submit" v-on:click="show = false" class="button is-primary">Submit</button>
@@ -126,7 +130,11 @@
               <form id="form" class="field" v-on:submit.prevent="submitReply">
                 <p class="control">
                   <label class="label" for="locationReply">Reply</label>
-                  <b-input type="textarea" placeholder="Reply" id="locationReply" maxlength="75" v-model="reply"></b-input>
+                  <b-input type="textarea" placeholder="Reply" id="locationReply" maxlength="100" v-model="reply"></b-input>
+                </p>
+                <p>
+                  If you're posting a URL, please use a shortened link from: <a href="https://bitly.com" target="_blank">bitly.com</a><br>
+                  This helps keeps everything looking tidy.
                 </p>
                 <p class="control">
                   <button type="submit" v-on:click="showReply = false" class="button is-primary">Submit</button>
