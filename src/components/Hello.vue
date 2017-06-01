@@ -106,7 +106,7 @@
                 </p>
                 <p>
                   If you're posting a URL, please use a shortened link from: <a href="https://bitly.com" target="_blank">bitly.com</a><br>
-                  This helps keeps everything looking tidy.
+                  This helps to keep everything looking tidy.
                 </p>
                 <p class="control">
                   <button type="submit" v-on:click="show = false" class="button is-primary">Submit</button>
@@ -134,7 +134,7 @@
                 </p>
                 <p>
                   If you're posting a URL, please use a shortened link from: <a href="https://bitly.com" target="_blank">bitly.com</a><br>
-                  This helps keeps everything looking tidy.
+                  This helps to keep everything looking tidy.
                 </p>
                 <p class="control">
                   <button type="submit" v-on:click="showReply = false" class="button is-primary">Submit</button>
