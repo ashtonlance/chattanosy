@@ -2,7 +2,7 @@
   <div class="hello">
     <div id="main-wrapper">
       <h1 class="has-text-left title" style="padding-left: 25px;">What's new in Chattanooga?</h1>
-      <gmap-map id="map" :options="options" :center="center" :zoom="12" style="width: 90%; height: 450px">
+      <gmap-map id="map" :options="options" :center="center" :zoom="13" style="width: 90%; height: 450px">
         <gmap-marker :key="index" v-for="(location, index) in filteredLocations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="location.visible=true">
           <gmap-info-window :opened="location.visible" @closeclick="location.visible=false">
             <b>{{location.name}}</b>
@@ -25,7 +25,7 @@
           </p>
         </b-field>
         <br>
-    <transition name="fade">
+      <transition name="fade">
         <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
       </transition>
       <br>
@@ -36,7 +36,7 @@
         </div>
       </div>
       <br>
-      <paginate name="rows" :list="filteredLocations" :per="10" ref="paginator">
+      <paginate name="rows" :list="filteredLocations" :per="10" ref="paginator"> 
         <table class="table is-narrow" id="location-table">
           <tr>
             <th>Name</th>
@@ -81,7 +81,7 @@
                   <label class="label" for="locationName">Name</label>
                   <input type="text" placeholder="Name of this location" id="locationName" class="input" v-model="newLocation.name">
                 </p>
-                <p v-if="!usingCurrentLocation" class="control">
+                <p class="control">
                   <label class="label" for="locationAddress">Address</label>
                   <input type="text" placeholder="123 Main St" id="locationAddress" class="input" v-model="newLocation.address">
                 </p>
@@ -90,11 +90,11 @@
                 </p>
                 <div class="field is-horizontal">
                   <div class="field-body">
-                    <p v-if="usingCurrentLocation" class="control">
+                    <p style="display:none" class="control">
                       <label class="label" for="locationLatitude">Latitude</label>
                       <input type="text" id="locationLatitude" class="input" v-model="newLocation.lat">
                     </p>
-                    <p v-if="usingCurrentLocation" class="control">
+                    <p style="display:none" class="control">
                       <label class="label" for="locationLongitude">Longitude</label>
                       <input type="text" id="locationLongitude" class="input" v-model="newLocation.lng">
                     </p>
@@ -105,8 +105,7 @@
                   <b-input type="textarea" maxlength="125" placeholder="Notes about this location" id="locationNotes" v-model="newLocation.notes"></b-input>
                 </p>
                 <p>
-                  If you're posting a URL, please use a shortened link from: <a href="https://bitly.com" target="_blank">bitly.com</a><br>
-                  This helps to keep everything looking tidy.
+                  If you're posting a URL, please use a shortened link from: <a href="https://bitly.com" target="_blank">bitly.com</a>
                 </p>
                 <p class="control">
                   <button type="submit" v-on:click="show = false" class="button is-primary">Submit</button>
@@ -133,8 +132,7 @@
                   <b-input type="textarea" placeholder="Reply" id="locationReply" maxlength="100" v-model="reply"></b-input>
                 </p>
                 <p>
-                  If you're posting a URL, please use a shortened link from: <a href="https://bitly.com" target="_blank">bitly.com</a><br>
-                  This helps to keep everything looking tidy.
+                  If you're posting a URL, please use a shortened link from: <a href="https://bitly.com" target="_blank">bitly.com</a>
                 </p>
                 <p class="control">
                   <button type="submit" v-on:click="showReply = false" class="button is-primary">Submit</button>
@@ -196,12 +194,21 @@ export default {
     addLocation: function () {
       axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=` + this.newLocation.address + ',+Chattanooga,+TN&key=AIzaSyDni8xEY3eGI6q0ewpUjxYfQyvjJeDbbQo')
         .then(response => {
+          if (this.newLocation.name === '') {
+            this.show = true
+            miniToastr.error('A name is required when submitting a new location!')
+            return
+          }
+
+          if (this.newLocation.address === '') {
+            this.show = true
+            miniToastr.error('An address is required when submitting a new location!')
+            return
+          }
+
           if (this.newLocation.lat === '') {
             this.newLocation.lat = response.data.results[0].geometry.location.lat
             this.newLocation.lng = response.data.results[0].geometry.location.lng
-          }
-          if (this.newLocation.address === '') {
-            this.newLocation.address = this.newLocation.lat + ', ' + this.newLocation.lng
           }
 
           var today = new Date()
@@ -254,6 +261,10 @@ export default {
         that.newLocation.lat = position.coords.latitude
         that.newLocation.lng = position.coords.longitude
         that.isLoading = false
+        axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=` + that.newLocation.lat + ', ' + that.newLocation.lng + '&key=AIzaSyDni8xEY3eGI6q0ewpUjxYfQyvjJeDbbQo')
+        .then(response => {
+          that.newLocation.address = response.data.results[0].formatted_address
+        })
       })
     }
   },
