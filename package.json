@@ -13,7 +13,7 @@
   "dependencies": {
     "@lassehaslev/vue-confirm": "^1.1.1",
     "axios": "^0.16.1",
-    "buefy": "^0.3.1",
+    "buefy": "^0.4.0",
     "firebase": "^4.0.0",
     "jquery": "^3.2.1",
     "mini-toastr": "^0.6.5",
@@ -27,7 +27,7 @@
     "vue-scrollto": "^2.6.8",
     "vue-spinner": "^1.0.2",
     "vue-toast": "^3.1.0",
-    "vue2-google-maps": "^0.7.5",
+    "vue2-google-maps": "^0.7.7",
     "vuefire": "^1.4.3"
   },
   "devDependencies": {

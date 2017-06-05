@@ -5,7 +5,8 @@ import Vue from 'vue'
 import VueFire from 'vuefire'
 import App from './App'
 import router from './router'
-import Buefy from 'buefy'
+import Input from 'buefy/src/components/input'
+import Field from 'buefy/src/components/field'
 import 'buefy/lib/buefy.css'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import miniToastr from 'mini-toastr'
@@ -23,7 +24,8 @@ Vue.use(VueAnalytics, {
   router
 })
 Vue.use(VueFire)
-Vue.use(Buefy)
+Vue.component(Input.name, Input)
+Vue.component(Field.name, Field)
 Vue.use(miniToastr)
 Vue.use(VueScrollTo)
 Vue.use(VuePaginate)
