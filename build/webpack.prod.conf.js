@@ -7,7 +7,6 @@ var baseWebpackConfig = require('./webpack.base.conf')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var UnCSSPlugin = require('uncss-webpack-plugin');
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
@@ -43,7 +42,6 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
-    new UnCSSPlugin({ /* options */ }),
     new OptimizeCSSPlugin({
       cssProcessorOptions: {
         safe: true
