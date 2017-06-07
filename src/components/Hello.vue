@@ -118,7 +118,7 @@
                 </p>
                 <p class="control">
                   <label class="label" for="locationImage">Upload an image:</label>
-                  <input type="file" name="image" id="locationImage" accept="image/*" capture="camera" @change="previewImage">
+                  <input type="file" name="image" id="locationImage" accept="image/*" @change="previewImage">
                 </p>
                 <p>
                   If you're posting a URL, please use a shortened link from:
@@ -174,7 +174,7 @@
               <form id="form" class="field" v-on:submit.prevent="addImage">
                 <p class="control">
                   <label class="label" for="locationImage">Upload an image:</label>
-                  <input type="file" class="input" name="image" capture="camera" id="locationImage" accept="image/*" @change="addImage">
+                  <input type="file" class="input" name="image" id="locationImage" accept="image/*" @change="addImage">
                 </p>
                 <p class="control">
                   <button type="submit" v-on:click="showUpload = false" class="button is-primary">Submit</button>
