@@ -45,7 +45,7 @@
               <td>                
                 <div v-if="location.image" style="font-size:.75rem;">
                   <b-tooltip label="Tap to enlarge image" position="is-right">
-                  <figure class="image is-96x96">
+                  <figure class="image is-128x128">
                     <img v-on:click="showImageLarge(location)" class="location-image" :src="location.image">
                   </figure>
                   </b-tooltip>
@@ -125,7 +125,7 @@
                   <a href="https://bitly.com" target="_blank">bitly.com</a>
                 </p>
                 <p class="control">
-                  <button type="submit" v-on:click="show = false" class="button is-primary">Submit</button>
+                  <button v-bind:class="{ 'is-loading': isLoading }" type="submit" v-on:click="show = false" class="button is-primary">Submit</button>
                 </p>
               </form>
             </div>
@@ -177,7 +177,7 @@
                   <input type="file" class="input" name="image" id="locationImage" accept="image/*" @change="addImage">
                 </p>
                 <p class="control">
-                  <button type="submit" v-on:click="showUpload = false" class="button is-primary">Submit</button>
+                  <button v-bind:class="{ 'is-loading': isLoading }" type="submit" v-on:click="showUpload = false" class="button is-primary">Submit</button>
                 </p>
               </form>
             </div>
@@ -301,6 +301,7 @@ export default {
         })
     },
     previewImage: function (event) {
+      this.isLoading = true
       var input = event.target
       if (input.files && input.files[0]) {
         let image = input.files[0]
@@ -309,7 +310,8 @@ export default {
         let that = this
         imageRef.put(image).then(function (snapshot) {
           console.log('Uploaded!')
-          that.newLocation.image = snapshot.metadata.downloadURLs[0]
+          that.newLocation.image = 'https://res.cloudinary.com/ashtonlance/image/fetch/a_exif,c_scale,e_auto_color,h_500/' + encodeURIComponent(snapshot.metadata.downloadURLs[0])
+          that.isLoading = false
         })
       }
     },
@@ -318,6 +320,7 @@ export default {
       placeToUpdate = location['.key'].toString()
     },
     addImage: function (event) {
+      this.isLoading = true
       var input = event.target
       if (input.files && input.files[0]) {
         let image = input.files[0]
@@ -326,9 +329,10 @@ export default {
         let that = this
         imageRef.put(image).then(function (snapshot) {
           console.log('Uploaded!')
-          that.newLocation.image = snapshot.metadata.downloadURLs[0]
+          that.newLocation.image = 'https://res.cloudinary.com/ashtonlance/image/fetch/a_exif,c_scale,e_auto_color,h_500/' + encodeURIComponent(snapshot.metadata.downloadURLs[0])
           let imageReply = locationsRef.child(placeToUpdate).child('image')
           imageReply.set(that.newLocation.image)
+          that.isLoading = false
         })
       }
     },
@@ -469,6 +473,11 @@ form {
 #results-info {
   margin-top: 15px;
   margin-bottom: 0;
+}
+
+.location-image {
+  max-height: 96px;
+  max-width: 96px;
 }
 
 @media (max-width: 375px) {

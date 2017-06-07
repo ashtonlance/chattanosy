@@ -13,36 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+'use strict'
 
-const functions = require('firebase-functions');
-const nodemailer = require('nodemailer');
+const functions = require('firebase-functions')
+const nodemailer = require('nodemailer')
 // Configure the email transport using the default SMTP transport and a GMail account.
-// For other types of transports such as Sendgrid see https://nodemailer.com/transports/
-// TODO: Configure the `gmail.email` and `gmail.password` Google Cloud environment variables.
-const gmailEmail = encodeURIComponent(functions.config().gmail.email);
-const gmailPassword = encodeURIComponent(functions.config().gmail.password);
+const gmailEmail = encodeURIComponent(functions.config().gmail.email)
+const gmailPassword = encodeURIComponent(functions.config().gmail.password)
 const mailTransport = nodemailer.createTransport(
-    `smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`);
+    `smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`)
 
 // Sends an email confirmation when a user changes his mailing list subscription.
 exports.sendEmailConfirmation = functions.database.ref('/locations').onWrite(event => {
-  const snapshot = event.data;
-  const val = snapshot.val();
-
+  const snapshot = event.data
+  // const val = snapshot.val()
 
   const mailOptions = {
     from: '"Chattanosy" <ashton@ashtonlance.com>',
     to: 'ashton@ashtonlance.com'
-  };
-  if (snapshot) {
-    mailOptions.subject = 'New Chattanosy Post';
-    mailOptions.text = 'Check Chattanosy!';
-    return mailTransport.sendMail(mailOptions).then(() => {
-      console.log('Email sent');
-    }).catch(error => {
-      console.error('There was an error while sending the email:', error);  
-    });
   }
-
-});
+  if (snapshot) {
+    mailOptions.subject = 'New Chattanosy Post'
+    mailOptions.text = 'Check Chattanosy!'
+    return mailTransport.sendMail(mailOptions).then(() => {
+      console.log('Email sent')
+    }).catch(error => {
+      console.error('There was an error while sending the email:', error)
+    })
+  }
+})
