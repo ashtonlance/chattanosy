@@ -25,10 +25,10 @@
           </p>
         </b-field>
         <br>
-      <transition name="fade">
-        <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
-      </transition>
-      <br>
+        <transition name="fade">
+          <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
+        </transition>
+        <br>
         <paginate-links for="rows" :async="true"></paginate-links>
         <br>
         <div id="results-info" v-if="$refs.paginator">
@@ -36,19 +36,31 @@
         </div>
       </div>
       <br>
-      <paginate name="rows" :list="filteredLocations" :per="10" ref="paginator"> 
+      <paginate name="rows" :list="filteredLocations" :per="10" ref="paginator">
         <table class="table is-narrow" id="location-table">
           <tr>
-            <th>Name</th>
-            <th>Address/Info</th>
           </tr>
           <tbody>
             <tr v-for="location in paginated('rows')" @mousedown="location.visible=true">
-              <td>{{location.name}}
-                <br>
-                <div style="font-size:.75rem;">Added: {{location.created}}</div>
+              <td>                
+                <div v-if="location.image" style="font-size:.75rem;">
+                  <b-tooltip label="Tap to enlarge image" position="is-right">
+                  <figure class="image is-96x96">
+                    <img v-on:click="showImageLarge(location)" class="location-image" :src="location.image">
+                  </figure>
+                  </b-tooltip>
+                </div>
+                <div v-if="!location.image" style="font-size:.75rem;">
+                  <b-tooltip label="Tap to upload an image" position="is-right">
+                  <figure class="image is-96x96">
+                    <img v-on:click="replyWithImage(location)" src="../assets/placeholder.png">
+                  </figure>
+                  </b-tooltip>
+                </div>
               </td>
               <td>
+                {{location.name}}
+                <div style="font-size:.75rem;">Added: {{location.created}}</div>
                 {{location.address}}
                 <br>{{location.notes}}
                 <br>
@@ -104,8 +116,13 @@
                   <label class="label" for="locationNotes">Notes</label>
                   <b-input type="textarea" maxlength="125" placeholder="Notes about this location" id="locationNotes" v-model="newLocation.notes"></b-input>
                 </p>
+                <p class="control">
+                  <label class="label" for="locationImage">Upload an image:</label>
+                  <input type="file" name="image" id="locationImage" accept="image/*" capture="camera" @change="previewImage">
+                </p>
                 <p>
-                  If you're posting a URL, please use a shortened link from: <a href="https://bitly.com" target="_blank">bitly.com</a>
+                  If you're posting a URL, please use a shortened link from:
+                  <a href="https://bitly.com" target="_blank">bitly.com</a>
                 </p>
                 <p class="control">
                   <button type="submit" v-on:click="show = false" class="button is-primary">Submit</button>
@@ -132,7 +149,8 @@
                   <b-input type="textarea" placeholder="Reply" id="locationReply" maxlength="100" v-model="reply"></b-input>
                 </p>
                 <p>
-                  If you're posting a URL, please use a shortened link from: <a href="https://bitly.com" target="_blank">bitly.com</a>
+                  If you're posting a URL, please use a shortened link from:
+                  <a href="https://bitly.com" target="_blank">bitly.com</a>
                 </p>
                 <p class="control">
                   <button type="submit" v-on:click="showReply = false" class="button is-primary">Submit</button>
@@ -143,15 +161,56 @@
         </div>
       </div>
     </transition>
+    <transition name="fade">
+      <div id="modal2" class="modal is-active" v-if="showUpload">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">CHATTANOSY</p>
+            <button id="closeModal" class="delete" v-on:click="showUpload = false"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="content">
+              <form id="form" class="field" v-on:submit.prevent="addImage">
+                <p class="control">
+                  <label class="label" for="locationImage">Upload an image:</label>
+                  <input type="file" class="input" name="image" capture="camera" id="locationImage" accept="image/*" @change="addImage">
+                </p>
+                <p class="control">
+                  <button type="submit" v-on:click="showUpload = false" class="button is-primary">Submit</button>
+                </p>
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+    </transition>
+    <transition name="fade">
+      <div id="modal2" class="modal is-active" v-if="showImage">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">CHATTANOSY</p>
+            <button id="closeModal" class="delete" v-on:click="showImage = false"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="content">
+              <img id="big-image">
+            </div>
+          </section>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
-import db from '../db'
+import { db, storage } from '../db'
 import axios from 'axios'
 import miniToastr from 'mini-toastr'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 let locationsRef = db.ref('locations/')
+let storageRef = storage.ref()
 let placeToUpdate
 export default {
   name: 'app',
@@ -170,10 +229,13 @@ export default {
         errors: '',
         replies: '',
         visible: false,
-        created: ''
+        created: '',
+        image: ''
       },
       show: false,
       showReply: false,
+      showUpload: false,
+      showImage: false,
       reply: '',
       replies: '',
       visible: false,
@@ -238,6 +300,45 @@ export default {
           miniToastr.error('Something went wrong!')
         })
     },
+    previewImage: function (event) {
+      var input = event.target
+      if (input.files && input.files[0]) {
+        let image = input.files[0]
+        let random = Math.floor(Math.random() * 2001)
+        let imageRef = storageRef.child('images/' + random + image.name)
+        let that = this
+        imageRef.put(image).then(function (snapshot) {
+          console.log('Uploaded!')
+          that.newLocation.image = snapshot.metadata.downloadURLs[0]
+        })
+      }
+    },
+    replyWithImage: function (location) {
+      this.showUpload = true
+      placeToUpdate = location['.key'].toString()
+    },
+    addImage: function (event) {
+      var input = event.target
+      if (input.files && input.files[0]) {
+        let image = input.files[0]
+        let random = Math.floor(Math.random() * 2001)
+        let imageRef = storageRef.child('images/' + random + image.name)
+        let that = this
+        imageRef.put(image).then(function (snapshot) {
+          console.log('Uploaded!')
+          that.newLocation.image = snapshot.metadata.downloadURLs[0]
+          let imageReply = locationsRef.child(placeToUpdate).child('image')
+          imageReply.set(that.newLocation.image)
+        })
+      }
+    },
+    showImageLarge: function (location) {
+      this.showImage = true
+      setTimeout(function () {
+        let imageToShow = document.getElementById('big-image')
+        imageToShow.src = location.image
+      }, 0)
+    },
     replyToLocation: function (location) {
       this.showReply = true
       placeToUpdate = location['.key'].toString()
@@ -262,9 +363,9 @@ export default {
         that.newLocation.lng = position.coords.longitude
         that.isLoading = false
         axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=` + that.newLocation.lat + ', ' + that.newLocation.lng + '&key=AIzaSyDni8xEY3eGI6q0ewpUjxYfQyvjJeDbbQo')
-        .then(response => {
-          that.newLocation.address = response.data.results[0].formatted_address
-        })
+          .then(response => {
+            that.newLocation.address = response.data.results[0].formatted_address
+          })
       })
     }
   },
@@ -361,7 +462,7 @@ form {
   background: rgba(1, 1, 1, 0.80);
 }
 
-#table-header > ul {
+#table-header>ul {
   display: inline-block;
 }
 
