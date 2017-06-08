@@ -21,7 +21,7 @@
     "sw-precache-webpack-plugin": "^0.11.3",
     "toastr": "^2.1.2",
     "uncss-webpack-plugin": "^0.1.1",
-    "vue": "^2.2.6",
+    "vue": "^2.3.4",
     "vue-analytics": "^4.1.2",
     "vue-filter": "^0.2.1",
     "vue-paginate": "^3.5.0",
