@@ -9,8 +9,16 @@
             <br> {{location.address}}
             <br> {{location.notes}}
             <br>
-            <div v-for="replies in location.replies">
-              <span class="message">Reply: {{replies.reply}}</span>
+            <br>
+            <div v-if="location.image" style="font-size:.75rem;">
+              <figure class="image is-96x96" style="margin:auto">
+                <img v-on:click="showImageLarge(location)" class="location-image" :src="location.image">
+              </figure>
+            </div>
+            <div v-if="location.replies">
+              <div v-for="replies in location.replies">
+                <span class="message">Reply: {{replies.reply}}</span>
+              </div>
             </div>
             <br>
           </gmap-info-window>
@@ -41,11 +49,11 @@
           <tr>
           </tr>
           <tbody>
-            <tr v-for="location in paginated('rows')" @mousedown="location.visible=true">
+            <tr v-for="location in paginated('rows')">
               <td>                
                 <div v-if="location.image" style="font-size:.75rem;">
                   <b-tooltip label="Tap to enlarge image" position="is-right">
-                  <figure class="image is-128x128">
+                  <figure class="image is-96x96">
                     <img v-on:click="showImageLarge(location)" class="location-image" :src="location.image">
                   </figure>
                   </b-tooltip>
@@ -58,8 +66,8 @@
                   </b-tooltip>
                 </div>
               </td>
-              <td>
-                {{location.name}}
+              <td @mousedown="location.visible=true">
+                <b>{{location.name}}</b>
                 <div style="font-size:.75rem;">Added: {{location.created}}</div>
                 {{location.address}}
                 <br>{{location.notes}}
