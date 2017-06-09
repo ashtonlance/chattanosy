@@ -10,6 +10,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+// const PrepackWebpackPlugin = require('prepack-webpack-plugin').default
 
 var env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -34,15 +35,19 @@ var webpackConfig = merge(baseWebpackConfig, {
       'process.env': env
     }),
     new webpack.optimize.AggressiveMergingPlugin(),
+    // new PrepackWebpackPlugin({}),
     new webpack.optimize.UglifyJsPlugin({
+      minimize: true,
       compress: { warnings: false },
       comments: false,
       sourceMap: true
     }),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     // extract css into its own file
     new ExtractTextPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
     }),
+    
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
     new OptimizeCSSPlugin({
@@ -133,5 +138,7 @@ if (config.build.bundleAnalyzerReport) {
   var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
+
+
 
 module.exports = webpackConfig
