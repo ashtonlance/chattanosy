@@ -33,10 +33,10 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
+    new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
+      compress: { warnings: false },
+      comments: false,
       sourceMap: true
     }),
     // extract css into its own file
@@ -71,6 +71,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       serviceWorkerLoader: `<script>${fs.readFileSync(path.join(__dirname,
         './service-worker-prod.js'), 'utf-8')}</script>`
     }),
+   
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
