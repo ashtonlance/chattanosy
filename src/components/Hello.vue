@@ -1,9 +1,10 @@
 <template>
   <div class="hello">
     <div id="main-wrapper">
-      <h1 class="has-text-left title" style="padding-left: 25px;">What's new in Chattanooga?</h1>
+      <div id="map-wrapper">
+      <h1 class="has-text-left title" style="padding-left: 25px;">What's new in Chattanooga?</h1>      
       <gmap-map id="map" :options="options" :center="center" :zoom="13" style="width: 90%; height: 450px">
-        <gmap-marker :key="index" v-for="(location, index) in filteredLocations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="location.visible=true">
+        <gmap-marker :icon="icon" :key="index" v-for="(location, index) in filteredLocations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="location.visible=true">
           <gmap-info-window :opened="location.visible" @closeclick="location.visible=false">
             <b>{{location.name}}</b>
             <br> {{location.address}}
@@ -24,6 +25,7 @@
           </gmap-info-window>
         </gmap-marker>
       </gmap-map>
+      </div>
       <div class="box" id="table-header">
         <h1 class="subtitle is-4 is-pulled-left">Chattanoogans are nosy about:</h1>
         <b-field class="is-pulled-right" id="controls" style="margin-bottom:1.5rem;">
@@ -251,7 +253,193 @@ export default {
       color: '#42b983',
       size: '30px',
       scrolled: false,
-      options: { scrollwheel: false },
+      icon: {
+        path: 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0',
+        fillColor: '#FFFFFF',
+        fillOpacity: 0.6,
+        scale: 0.3,
+        strokeColor: '#42b983',
+        strokeWeight: 1
+      },
+      options: {
+        scrollwheel: false,
+        styles: [
+          {
+            'featureType': 'water',
+            'elementType': 'geometry',
+            'stylers': [
+              {
+                'color': '#e9e9e9'
+              },
+              {
+                'lightness': 17
+              }
+            ]
+          },
+          {
+            'featureType': 'landscape',
+            'elementType': 'geometry',
+            'stylers': [
+              {
+                'color': '#f5f5f5'
+              },
+              {
+                'lightness': 20
+              }
+            ]
+          },
+          {
+            'featureType': 'road.highway',
+            'elementType': 'geometry.fill',
+            'stylers': [
+              {
+                'color': '#ffffff'
+              },
+              {
+                'lightness': 17
+              }
+            ]
+          },
+          {
+            'featureType': 'road.highway',
+            'elementType': 'geometry.stroke',
+            'stylers': [
+              {
+                'color': '#ffffff'
+              },
+              {
+                'lightness': 29
+              },
+              {
+                'weight': 0.2
+              }
+            ]
+          },
+          {
+            'featureType': 'road.arterial',
+            'elementType': 'geometry',
+            'stylers': [
+              {
+                'color': '#ffffff'
+              },
+              {
+                'lightness': 18
+              }
+            ]
+          },
+          {
+            'featureType': 'road.local',
+            'elementType': 'geometry',
+            'stylers': [
+              {
+                'color': '#ffffff'
+              },
+              {
+                'lightness': 16
+              }
+            ]
+          },
+          {
+            'featureType': 'poi',
+            'elementType': 'geometry',
+            'stylers': [
+              {
+                'color': '#f5f5f5'
+              },
+              {
+                'lightness': 21
+              }
+            ]
+          },
+          {
+            'featureType': 'poi.park',
+            'elementType': 'geometry',
+            'stylers': [
+              {
+                'color': '#dedede'
+              },
+              {
+                'lightness': 21
+              }
+            ]
+          },
+          {
+            'elementType': 'labels.text.stroke',
+            'stylers': [
+              {
+                'visibility': 'on'
+              },
+              {
+                'color': '#ffffff'
+              },
+              {
+                'lightness': 16
+              }
+            ]
+          },
+          {
+            'elementType': 'labels.text.fill',
+            'stylers': [
+              {
+                'saturation': 36
+              },
+              {
+                'color': '#333333'
+              },
+              {
+                'lightness': 40
+              }
+            ]
+          },
+          {
+            'elementType': 'labels.icon',
+            'stylers': [
+              {
+                'visibility': 'off'
+              }
+            ]
+          },
+          {
+            'featureType': 'transit',
+            'elementType': 'geometry',
+            'stylers': [
+              {
+                'color': '#f2f2f2'
+              },
+              {
+                'lightness': 19
+              }
+            ]
+          },
+          {
+            'featureType': 'administrative',
+            'elementType': 'geometry.fill',
+            'stylers': [
+              {
+                'color': '#fefefe'
+              },
+              {
+                'lightness': 20
+              }
+            ]
+          },
+          {
+            'featureType': 'administrative',
+            'elementType': 'geometry.stroke',
+            'stylers': [
+              {
+                'color': '#fefefe'
+              },
+              {
+                'lightness': 17
+              },
+              {
+                'weight': 1.2
+              }
+            ]
+          }
+        ]
+      },
       isLoading: false,
       usingCurrentLocation: false,
       paginate: ['rows']
@@ -420,6 +608,8 @@ export default {
 
 .vue-map-container {
   margin: auto;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.16), 0 3px 5px rgba(0,0,0,0.16);
+  border-radius: 5px;
 }
 
 #add-button {
@@ -487,6 +677,7 @@ form {
   max-height: 96px;
   max-width: 96px;
 }
+
 
 @media (max-width: 375px) {
   .subtitle {
