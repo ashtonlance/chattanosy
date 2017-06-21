@@ -4,8 +4,9 @@
       <div id="map-wrapper">
       <!--<h1 class="has-text-left title" style="padding-left: 25px;">What's new in Chattanooga?</h1>-->
       <a class="button" id="results-toggle" v-on:click="showResults = !showResults">toggle entries</a>    
-      <gmap-map id="map" :options="options" :center="center" :zoom="14">
-        <gmap-info-window :options="iwOptions" v-if="selectedMarker" :position="{lat: Number(selectedMarker.lat), lng: Number(selectedMarker.lng)}">
+      <gmap-map id="map" :options="options" :center="center" :zoom="14" :clickable="true">
+        <transition name="fade">   
+        <gmap-info-window :options="iwOptions" @closeclick="selectedMarker = ''" v-if="selectedMarker" :position="{lat: Number(selectedMarker.lat), lng: Number(selectedMarker.lng)}">
             <b>{{selectedMarker.name}}</b>
             <br> {{selectedMarker.address}}
             <br> {{selectedMarker.notes}}
@@ -23,7 +24,8 @@
             </div>
             <br>
           </gmap-info-window>
-        <gmap-marker :icon="icon" v-for="location in filteredLocations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="selectedMarker = location">          
+        </transition>
+        <gmap-marker :icon="icon" v-for="location in filteredLocations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" @click="selectedMarker = location">          
         </gmap-marker>
       </gmap-map>
       </div>
