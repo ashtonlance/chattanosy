@@ -2,10 +2,11 @@
   <div class="hello">
     <div id="main-wrapper">
       <div id="map-wrapper">
-      <h1 class="has-text-left title" style="padding-left: 25px;">What's new in Chattanooga?</h1>      
-      <gmap-map id="map" :options="options" :center="center" :zoom="13" style="width: 90%; height: 450px">
+      <h1 class="has-text-left title" style="padding-left: 25px;">What's new in Chattanooga?</h1>
+      <a class="button" id="results-toggle" v-on:click="showResults = !showResults">toggle results</a>    
+      <gmap-map id="map" :options="options" :center="center" :zoom="14">
         <gmap-marker :icon="icon" :key="index" v-for="(location, index) in filteredLocations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="location.visible=true">
-          <gmap-info-window :opened="location.visible" @closeclick="location.visible=false">
+          <gmap-info-window :options="iwOptions" :opened="location.visible" @closeclick="location.visible=false">
             <b>{{location.name}}</b>
             <br> {{location.address}}
             <br> {{location.notes}}
@@ -18,7 +19,7 @@
             </div>
             <div v-if="location.replies">
               <div v-for="replies in location.replies">
-                <span class="message">Reply: {{replies.reply}}</span>
+                <span class="message"><b>Reply:</b> {{replies.reply}}</span>
               </div>
             </div>
             <br>
@@ -26,6 +27,8 @@
         </gmap-marker>
       </gmap-map>
       </div>
+      <transition name="fade">      
+      <div v-if="showResults" id="results-box" ref="results">
       <div class="box" id="table-header">
         <h1 class="subtitle is-4 is-pulled-left">Chattanoogans are nosy about:</h1>
         <b-field class="is-pulled-right" id="controls" style="margin-bottom:1.5rem;">
@@ -35,9 +38,6 @@
           </p>
         </b-field>
         <br>
-        <transition name="fade">
-          <pulse-loader id="loader" :color="color" :size="size"></pulse-loader>
-        </transition>
         <br>
         <paginate-links for="rows" :async="true"></paginate-links>
         <br>
@@ -46,7 +46,8 @@
         </div>
       </div>
       <br>
-      <paginate name="rows" :list="filteredLocations" :per="10" ref="paginator">
+      
+      <paginate id="results" name="rows" :list="filteredLocations" :per="10" ref="paginator">
         <table class="table is-narrow" id="location-table">
           <tr>
           </tr>
@@ -83,7 +84,9 @@
           </tbody>
         </table>
       </paginate>
-      <div class="subtitle is-5">Tip: clicking a row opens the location details on the map</div>
+      </div>
+    </transition>
+      <div id="tip" class="subtitle is-5">Tip: clicking a row opens the location details on the map</div>
     </div>
     <transition name="fade">
       <span v-if="scrolled" id="scroll-top" class="tag is-dark" href="#" v-scroll-to="'#map'">Scroll to map</span>
@@ -218,7 +221,6 @@
 import { db, storage } from '../db'
 import axios from 'axios'
 import miniToastr from 'mini-toastr'
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 let locationsRef = db.ref('locations/')
 let storageRef = storage.ref()
 let placeToUpdate
@@ -246,12 +248,13 @@ export default {
       showReply: false,
       showUpload: false,
       showImage: false,
+      showResults: true,
       reply: '',
       replies: '',
       visible: false,
       search: '',
       color: '#42b983',
-      size: '30px',
+      size: '15px',
       scrolled: false,
       icon: {
         path: 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0',
@@ -260,6 +263,9 @@ export default {
         scale: 0.3,
         strokeColor: '#42b983',
         strokeWeight: 1
+      },
+      iwOptions: {
+        maxWidth: 250
       },
       options: {
         scrollwheel: false,
@@ -445,9 +451,6 @@ export default {
       paginate: ['rows']
     }
   },
-  components: {
-    PulseLoader
-  },
   methods: {
     addLocation: function () {
       axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=` + this.newLocation.address + ',+Chattanooga,+TN&key=AIzaSyDni8xEY3eGI6q0ewpUjxYfQyvjJeDbbQo')
@@ -598,6 +601,13 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
+
 .hello {
   padding-top: 25px;
 }
@@ -605,11 +615,15 @@ export default {
 #main-wrapper {
   margin-bottom: 50px;
 }
-
+#results-toggle {
+  display: none;
+}
 .vue-map-container {
   margin: auto;
   box-shadow: 0 3px 5px rgba(0,0,0,0.16), 0 3px 5px rgba(0,0,0,0.16);
   border-radius: 5px;
+  width: 90%;
+  height: 400px;
 }
 
 #add-button {
@@ -678,10 +692,66 @@ form {
   max-width: 96px;
 }
 
-
 @media (max-width: 375px) {
   .subtitle {
     font-size: 1.25rem !important;
   }
+}
+
+@media (min-width: 1000px) {
+  #map-wrapper h1 {
+    display: none;
+  }
+  #map-wrapper {
+    margin-top: -2rem;
+  }
+  .hello {
+    padding-top: 0;
+  }
+  #tip {
+    display: none;
+  }
+  .vue-map-container {
+    height: 93vh;
+    width: 100%;
+    box-shadow: none;
+  }
+  #results-toggle {
+    display: inline-block;
+    z-index: 5;
+    position: relative;
+    top: 40px;
+  }
+  #results-box {
+    display: block;
+    position: absolute;
+    top: 11vh;
+    left: 20px;
+    max-width: 35%;
+  }
+  #results {
+    max-height: 80vh;
+    overflow: scroll;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.16), 0 3px 5px rgba(0,0,0,0.16);
+  }
+  #location-table {
+    width: 100%;
+    margin-bottom: 0px;
+    background: rgba(255, 255, 255, 0.85);
+  }
+  #table-header {
+    max-width: 360px;
+    position: absolute;
+    top: -2rem;
+    right: -60vw;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 3px 5px rgba(0,0,0,0.16), 0 3px 5px rgba(0,0,0,0.16);
+    padding-left: 2%;
+    padding-right: 2%;
+  }
+  #main-wrapper {
+    margin-bottom: 0px;
+  }
+
 }
 </style>
