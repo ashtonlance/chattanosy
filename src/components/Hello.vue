@@ -2,8 +2,8 @@
   <div class="hello">
     <div id="main-wrapper">
       <div id="map-wrapper">
-      <h1 class="has-text-left title" style="padding-left: 25px;">What's new in Chattanooga?</h1>
-      <a class="button" id="results-toggle" v-on:click="showResults = !showResults">toggle results</a>    
+      <!--<h1 class="has-text-left title" style="padding-left: 25px;">What's new in Chattanooga?</h1>-->
+      <a class="button" id="results-toggle" v-on:click="showResults = !showResults">toggle entries</a>    
       <gmap-map id="map" :options="options" :center="center" :zoom="14">
         <gmap-marker :icon="icon" :key="index" v-for="(location, index) in filteredLocations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="location.visible=true">
           <gmap-info-window :options="iwOptions" :opened="location.visible" @closeclick="location.visible=false">
@@ -30,8 +30,8 @@
       <transition name="fade">      
       <div v-if="showResults" id="results-box" ref="results">
       <div class="box" id="table-header">
-        <h1 class="subtitle is-4 is-pulled-left">Chattanoogans are nosy about:</h1>
-        <b-field class="is-pulled-right" id="controls" style="margin-bottom:1.5rem;">
+        <h1 class="subtitle is-4 ">What are you nosy about?</h1>
+        <b-field class="has-text-centered" id="controls" style="justify-content:center">
           <b-input id="search" placeholder="Type to search" type="input" v-model="search"></b-input>
           <p class="control">
             <a id="add-button" class="button is-primary" v-on:click="show = true">Add an Entry</a>
@@ -39,17 +39,13 @@
         </b-field>
         <br>
         <br>
-        <paginate-links for="rows" :async="true"></paginate-links>
-        <br>
-        <div id="results-info" v-if="$refs.paginator">
-          Viewing {{$refs.paginator.pageItemsCount}} results
-        </div>
+        
       </div>
       <br>
-      
-      <paginate id="results" name="rows" :list="filteredLocations" :per="10" ref="paginator">
+      <div id="results">      
+      <paginate name="rows" :list="filteredLocations" :per="10" ref="paginator">
         <table class="table is-narrow" id="location-table">
-          <tr>
+          <tr>            
           </tr>
           <tbody>
             <tr v-for="location in paginated('rows')">
@@ -84,6 +80,9 @@
           </tbody>
         </table>
       </paginate>
+      <paginate-links for="rows">
+      </paginate-links>
+      </div>
       </div>
     </transition>
       <div id="tip" class="subtitle is-5">Tip: clicking a row opens the location details on the map</div>
@@ -607,7 +606,6 @@ export default {
 .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
   opacity: 0;
 }
-
 .hello {
   padding-top: 25px;
 }
@@ -647,7 +645,7 @@ ul {
 }
 
 li {
-  display: inline-block;
+  /*display: inline-block;*/
   margin: 0 10px;
 }
 
@@ -678,8 +676,10 @@ form {
   background: rgba(1, 1, 1, 0.80);
 }
 
-#table-header>ul {
-  display: inline-block;
+#results>ul {
+  display: inline;
+  margin: auto;
+  max-width: 90%;
 }
 
 #results-info {
@@ -690,6 +690,12 @@ form {
 .location-image {
   max-height: 96px;
   max-width: 96px;
+}
+ul.paginate-links > li.number > a {
+  color: red;
+}
+.is-5 {
+  margin-top: 5px;
 }
 
 @media (max-width: 375px) {
@@ -730,14 +736,21 @@ form {
     max-width: 35%;
   }
   #results {
+    padding: 5px;
     max-height: 80vh;
+    background: rgba(255, 255, 255, 0.85);
     overflow: scroll;
     box-shadow: 0 3px 5px rgba(0,0,0,0.16), 0 3px 5px rgba(0,0,0,0.16);
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+  #results>ul {
+    padding-bottom: 15px;
   }
   #location-table {
     width: 100%;
     margin-bottom: 0px;
-    background: rgba(255, 255, 255, 0.85);
+    background-color: transparent;
   }
   #table-header {
     max-width: 360px;
@@ -748,9 +761,13 @@ form {
     box-shadow: 0 3px 5px rgba(0,0,0,0.16), 0 3px 5px rgba(0,0,0,0.16);
     padding-left: 2%;
     padding-right: 2%;
+    max-height: 130px;
   }
   #main-wrapper {
     margin-bottom: 0px;
+  }
+  #results tr {
+    padding: 1rem;
   }
 
 }
