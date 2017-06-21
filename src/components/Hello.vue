@@ -5,25 +5,25 @@
       <!--<h1 class="has-text-left title" style="padding-left: 25px;">What's new in Chattanooga?</h1>-->
       <a class="button" id="results-toggle" v-on:click="showResults = !showResults">toggle entries</a>    
       <gmap-map id="map" :options="options" :center="center" :zoom="14">
-        <gmap-marker :icon="icon" :key="index" v-for="(location, index) in filteredLocations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="location.visible=true">
-          <gmap-info-window :options="iwOptions" :opened="location.visible" @closeclick="location.visible=false">
-            <b>{{location.name}}</b>
-            <br> {{location.address}}
-            <br> {{location.notes}}
+        <gmap-info-window :options="iwOptions" v-if="selectedMarker" :position="{lat: Number(selectedMarker.lat), lng: Number(selectedMarker.lng)}">
+            <b>{{selectedMarker.name}}</b>
+            <br> {{selectedMarker.address}}
+            <br> {{selectedMarker.notes}}
             <br>
             <br>
-            <div v-if="location.image" style="font-size:.75rem;">
+            <div v-if="selectedMarker.image" style="font-size:.75rem;">
               <figure class="image is-96x96" style="margin:auto">
-                <img v-on:click="showImageLarge(location)" class="location-image" :src="location.image">
+                <img v-on:click="showImageLarge(selectedMarker)" class="location-image" :src="selectedMarker.image">
               </figure>
             </div>
-            <div v-if="location.replies">
-              <div v-for="replies in location.replies">
+            <div v-if="selectedMarker.replies">
+              <div v-for="replies in selectedMarker.replies">
                 <span class="message"><b>Reply:</b> {{replies.reply}}</span>
               </div>
             </div>
             <br>
           </gmap-info-window>
+        <gmap-marker :icon="icon" v-for="location in filteredLocations" :position="{lat: Number(location.lat), lng: Number(location.lng)}" :clickable="true" :draggable="false" @mousedown="selectedMarker = location">          
         </gmap-marker>
       </gmap-map>
       </div>
@@ -65,7 +65,7 @@
                   </b-tooltip>
                 </div>
               </td>
-              <td @mousedown="location.visible=true">
+              <td @mousedown="selectedMarker = location">
                 <b>{{location.name}}</b>
                 <div style="font-size:.75rem;">Added: {{location.created}}</div>
                 {{location.address}}
@@ -244,6 +244,8 @@ export default {
         image: ''
       },
       show: false,
+      selectedMarker: '',
+      location: '',
       showReply: false,
       showUpload: false,
       showImage: false,
