@@ -589,12 +589,16 @@ export default {
     }
   },
   updated: function () {
-    var x = document.getElementById('location-table').rows.length - 1
-    if (x !== 0) {
-      if (x === 10) {
-        let loader = document.getElementById('loader')
-        loader.style.display = 'none'
+    try {
+      var x = document.getElementById('location-table').rows.length - 1
+      if (x !== 0) {
+        if (x === 10) {
+          let loader = document.getElementById('loader')
+          loader.style.display = 'none'
+        }
       }
+    } catch (err) {
+      return
     }
   },
   destroyed () {
