@@ -272,6 +272,7 @@ export default {
       },
       options: {
         scrollwheel: false,
+        mapTypeControlOptions: { mapTypeIds: [] },
         styles: [
           {
             'featureType': 'water',
@@ -670,10 +671,12 @@ form {
 
 #table-header {
   width: auto;
-  margin: 50px auto;
+  margin: 5px auto;
   margin-bottom: 15px;
   padding-left: 7%;
   padding-right: 7%;
+  padding-bottom: 0px;
+  max-height: 20vh;
 }
 
 #scroll-top {
@@ -763,7 +766,7 @@ ul.paginate-links > li.number > a {
   #table-header {
     max-width: 360px;
     position: absolute;
-    top: -2rem;
+    top: 1rem;
     right: -60vw;
     background: rgba(255, 255, 255, 0.85);
     box-shadow: 0 3px 5px rgba(0,0,0,0.16), 0 3px 5px rgba(0,0,0,0.16);
