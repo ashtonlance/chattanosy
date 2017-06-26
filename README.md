@@ -1,7 +1,7 @@
 # Chattanosy
 I built this because I'm always being nosy about new things/places being built in our city. I figured we could create community-powered database to keep track of them all! This site is very-beta - so please test it out and let me know if you have any suggestions/improvement/bugs to report.
 
-![alt text](http://i.imgur.com/dCBoOOd.png "Logo Title Text 1")
+![alt text](https://ashtonlance.com/static/img/chattanosy.23c1753.png)
 
 
 > A Vue.js project
