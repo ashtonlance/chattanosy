@@ -3,7 +3,7 @@
     <div id="main-wrapper">
       <div id="map-wrapper">
       <!--<h1 class="has-text-left title" style="padding-left: 25px;">What's new in Chattanooga?</h1>-->
-      <a class="button" id="results-toggle" v-on:click="showResults = !showResults">toggle entries</a>    
+      <a class="button" id="results-toggle" v-on:click="showResults = !showResults">Toggle Controls</a>    
       <gmap-map id="map" :options="options" :center="center" :zoom="14" :clickable="true">
         <transition name="fade">   
         <gmap-info-window :options="iwOptions" @closeclick="selectedMarker = ''" v-if="selectedMarker" :position="{lat: Number(selectedMarker.lat), lng: Number(selectedMarker.lng)}">
@@ -757,7 +757,13 @@ ul.paginate-links > li.number > a {
   }
   #results>ul {
     padding-bottom: 15px;
+    display: inline-block !important;
+
+    
   }
+  .number {
+      background: transparent !important;
+    }
   #location-table {
     width: 100%;
     margin-bottom: 0px;
@@ -770,8 +776,8 @@ ul.paginate-links > li.number > a {
     right: -60vw;
     background: rgba(255, 255, 255, 0.85);
     box-shadow: 0 3px 5px rgba(0,0,0,0.16), 0 3px 5px rgba(0,0,0,0.16);
-    padding-left: 2%;
-    padding-right: 2%;
+    padding-left: 1rem;
+    padding-right: 1rem;
     max-height: 130px;
   }
   #main-wrapper {

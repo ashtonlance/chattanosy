@@ -3,7 +3,7 @@
     <nav class="nav has-shadow">
       <div class="nav-left">
         <router-link to="/" class="nav-item">
-          <h1>CHATTANOSY</h1>
+          <img src="static/logo.svg">
         </router-link>
         
       </div>
