@@ -4,8 +4,8 @@
   "dependencies": {
     "@google-cloud/debug-agent": "^0.10.2",
     "@google-cloud/storage": "^0.7.0",
-    "firebase-admin": "^4.1.1",
-    "firebase-functions": "^1.0.2",
+    "firebase-admin": "^11.4.1",
+    "firebase-functions": "^4.1.1",
     "mkdirp-promise": "^5.0.1",
     "nodemailer": "^2.4.1",
     "sharp": "^0.17.2"
