@@ -20,7 +20,7 @@
     "firebase-admin": "^5.12.1",
     "firebase-functions": "^1.0.2",
     "hoek": "^5.0.3",
-    "i": "^0.3.5",
+    "i": "^0.3.7",
     "jquery": "^3.2.1",
     "lodash": "^4.17.19",
     "mini-toastr": "^0.6.5",
